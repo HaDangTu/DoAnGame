@@ -58,8 +58,9 @@ CSimon *simon;
 CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
-
+bool flag = false;
 vector<LPGAMEOBJECT> objects;
+DWORD now;
 
 class CSampleKeyHander: public CKeyEventHandler
 {
@@ -77,7 +78,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	{
 	case DIK_D:
 		if (!game->IsKeyDown(DIK_DOWN))
-		simon->SetState(SIMON_STATE_JUMP);
+		simon->SetState(SIMON_STATE_JUMP);		
 		break;
 	case DIK_DOWN:
 		float temp_x, temp_y;
@@ -86,6 +87,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_F:
 		simon->SetState(SIMON_STATE_FIGHT);
+		flag = true;
 		break;
 	}
 }
@@ -101,23 +103,40 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 		simon->SetPosition(temp_x, temp_y - 9);
 		simon->SetState(SIMON_STATE_IDLE);
 		break;
+	case DIK_F:
+		simon->SetState(SIMON_STATE_FIGHT);
+		break;
 	}
 }
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
-	// disable control key when Mario die 
-	if (game->IsKeyDown(DIK_DOWN))
+	
+
+	if (simon->state == SIMON_STATE_FIGHT && flag == true)
 	{
-		simon->SetState(SIMON_STATE_KNEE);
-		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		now = GetTickCount();
+		flag = false;
 	}
-	else
+		DWORD frameStart = GetTickCount();
+	if (simon->state == SIMON_STATE_FIGHT)
 	{
-		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-		else simon->SetState(SIMON_STATE_IDLE);
+		if(frameStart-now>=200)
+			simon->state = SIMON_STATE_IDLE;
+	}
+	else {
+		if (game->IsKeyDown(DIK_DOWN))
+		{
+			simon->SetState(SIMON_STATE_KNEE);
+			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		}
+		else
+		{
+			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			else simon->SetState(SIMON_STATE_IDLE);
+		}
 	}
 }
 
@@ -142,12 +161,11 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void AddAnimation(ifstream &in, CSprites *sprites,
 	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, 
-	int n, bool flag = false);
+	int n);
 void LoadDataFromFile(ifstream &in,
 	int &id,
 	int &left, int &top,
-	int &right, int &bottom,
-	bool = false);
+	int &right, int &bottom);
 void LoadResources()
 {
 	CTextures *texture = CTextures::GetInstance();
@@ -223,8 +241,9 @@ void LoadResources()
 	animations->Add(302, ani);
 	AddAnimation(in, sprites, ani, texsimon, 3); //fight left
 	animations->Add(401, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3, true); //fight right
+	AddAnimation(in, sprites, ani, texsimon, 3); //fight right
 	animations->Add(402, ani);
+	in.close();
 
 	simon = new CSimon();
 	simon->AddAnimation(101);
@@ -235,7 +254,8 @@ void LoadResources()
 	simon->AddAnimation(302);
 	simon->AddAnimation(401);
 	simon->AddAnimation(402);
-	simon->SetPosition(10.0f, 50.0f);
+	simon->SetPosition(10.0f, 80.0f);
+	//simon->SetState(SIMON_STATE_FIGHT);
 	objects.push_back(simon);
 
 	LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
@@ -310,14 +330,14 @@ void LoadResources()
 }
 
 void AddAnimation(ifstream &in, CSprites * sprites, 
-	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, int n, bool flag)
+	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, int n)
 {
 	int id, left, top, right, bottom;
 	int i;
 	ani = new CAnimation(100);
 	for (i = 0; i < n; i++)
 	{
-		LoadDataFromFile(in, id, left, top, right, bottom, flag);
+		LoadDataFromFile(in, id, left, top, right, bottom);
 		sprites->Add(id, left, top, right, bottom, texture);
 		ani->Add(id);
 	}
@@ -326,8 +346,7 @@ void AddAnimation(ifstream &in, CSprites * sprites,
 void LoadDataFromFile(ifstream &in,
 	int &id,
 	int &left, int &top,
-	int &right, int &bottom,
-	bool flag)
+	int &right, int &bottom)
 {
 	in >> id;
 	in >> left;
@@ -335,7 +354,6 @@ void LoadDataFromFile(ifstream &in,
 	in >> right;
 	in >> bottom;
 
-	if (flag == true) in.close();
 }
 /*
 	Update world status for this frame
