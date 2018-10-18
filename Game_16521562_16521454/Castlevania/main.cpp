@@ -51,7 +51,7 @@ using namespace std;
 #define ID_SIMON	0
 #define ID_BRICK	1
 #define ID_BBOX		2
-#define ID_GHOST    3
+#define ID_GHOUL    3
 #define ID_BAT      4
 CGame *game;
 CSimon *simon;
