@@ -7,6 +7,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	CGameObject::Update(dt);
 
 	vy += SIMON_GRAVITY * dt;
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEventsResult.clear();
@@ -40,11 +41,15 @@ void CSimon::Render()
 		{
 			ani = SIMON_ANI_IDLE_RIGHT;
 			if (mx > 0) ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+			if (state == SIMON_STATE_FIGHT)
+				ani = SIMON_ANI_FIGHT_RIGHT;
+				//DebugOut(L"ani: %d", ani);
 		}
 		else
 		{
 			ani = SIMON_ANI_IDLE_LEFT;
 			if (mx > 0) ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+			if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_FIGHT_LEFT;
 		}
 	}
 	else
@@ -58,7 +63,7 @@ void CSimon::Render()
 		ani = SIMON_ANI_JUMP_LEFT;
 	else if (vy < 0 && nx > 0)
 		ani = SIMON_ANI_JUMP_RIGHT;
-
+	
 	animations[ani]->Render(x, y, 255);
 	RenderBoundingBox();
 }
@@ -107,6 +112,9 @@ void CSimon::SetState(int state)
 	case SIMON_STATE_KNEE:
 		vx = 0;
 		mx = 1;
+		break;
+	case SIMON_STATE_FIGHT:
+		vx = 0;
 		break;
 	}
 }
