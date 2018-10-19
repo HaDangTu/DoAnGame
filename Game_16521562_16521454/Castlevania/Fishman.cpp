@@ -46,9 +46,11 @@ void CFishman::Render()
 		else
 			ani= FISHMAN_ANI_FIRE_RIGHT;
 	}
-	else if (vx > 0) ani = FISHMAN_ANI_WALKING_RIGHT;
-	else ani = FISHMAN_ANI_WALKING_LEFT;
-		animations[ani]->Render(x, y);
+	else if (vx > 0)
+		ani = FISHMAN_ANI_WALKING_RIGHT;
+	else 
+		ani = FISHMAN_ANI_WALKING_LEFT;
+	animations[ani]->Render(x, y);
 }
 
 void CFishman::SetState(int state)
