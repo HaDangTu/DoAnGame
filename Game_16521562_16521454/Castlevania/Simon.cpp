@@ -6,7 +6,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	CGameObject::Update(dt);
 
-	vy += SIMON_GRAVITY * dt;
+	vy += SIMON_GRAVITY;
 	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -24,8 +24,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		float min_tx, min_ty, nx = 0, ny;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
+		x += min_tx * dx + nx * 0.2f;
+		y += min_ty * dy + ny * 0.2f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
@@ -40,16 +40,24 @@ void CSimon::Render()
 		if (nx > 0)
 		{
 			ani = SIMON_ANI_IDLE_RIGHT;
-			if (mx > 0) ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
-			if (state == SIMON_STATE_FIGHT)
+			if (mx > 0)
+			{
+				ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+				if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
+			}
+			if (state == SIMON_STATE_FIGHT && mx == 0)
 				ani = SIMON_ANI_FIGHT_RIGHT;
 				//DebugOut(L"ani: %d", ani);
 		}
 		else
 		{
 			ani = SIMON_ANI_IDLE_LEFT;
-			if (mx > 0) ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
-			if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_FIGHT_LEFT;
+			if (mx > 0)
+			{
+				ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+				if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_KNEE_FIGHT_LEFT;
+			}
+			if (state == SIMON_STATE_FIGHT && mx == 0) ani = SIMON_ANI_FIGHT_LEFT;
 		}
 	}
 	else

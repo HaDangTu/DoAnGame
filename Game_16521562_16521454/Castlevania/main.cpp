@@ -58,10 +58,10 @@ CSimon *simon;
 CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
-bool flag = false;
+//bool flag = false;
 vector<LPGAMEOBJECT> objects;
 DWORD now;
-
+DWORD FrameStart;
 class CSampleKeyHander: public CKeyEventHandler
 {
 	virtual void KeyState(BYTE *states);
@@ -87,7 +87,8 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_F:
 		simon->SetState(SIMON_STATE_FIGHT);
-		flag = true;
+		FrameStart = GetTickCount();
+		//flag = true;
 		break;
 	}
 }
@@ -103,9 +104,6 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 		simon->SetPosition(temp_x, temp_y - 9);
 		simon->SetState(SIMON_STATE_IDLE);
 		break;
-	case DIK_F:
-		simon->SetState(SIMON_STATE_FIGHT);
-		break;
 	}
 }
 
@@ -113,21 +111,18 @@ void CSampleKeyHander::KeyState(BYTE *states)
 {
 	
 
-	if (simon->state == SIMON_STATE_FIGHT && flag == true)
-	{
-		now = GetTickCount();
-		flag = false;
-	}
-		DWORD frameStart = GetTickCount();
-	if (simon->state == SIMON_STATE_FIGHT)
-	{
-		if(frameStart-now>=200)
-			simon->state = SIMON_STATE_IDLE;
-	}
-	else {
+	
 		if (game->IsKeyDown(DIK_DOWN))
 		{
-			simon->SetState(SIMON_STATE_KNEE);
+			if (simon->GetState() == SIMON_STATE_FIGHT)
+			{
+				now = GetTickCount();
+				if (now - FrameStart >= 300)
+					simon->SetState(SIMON_STATE_KNEE);
+				//flag == false;
+			}
+			else simon->SetState(SIMON_STATE_KNEE);
+			//simon->SetState(SIMON_STATE_KNEE);
 			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
 			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
 		}
@@ -135,9 +130,15 @@ void CSampleKeyHander::KeyState(BYTE *states)
 		{
 			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
 			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			else if (simon->GetState() == SIMON_STATE_FIGHT)
+			{
+				now = GetTickCount();
+				if (now - FrameStart >= 300)
+					simon->SetState(SIMON_STATE_IDLE);
+				//flag == false;
+			}
 			else simon->SetState(SIMON_STATE_IDLE);
 		}
-	}
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -180,7 +181,7 @@ void LoadResources()
 	LPDIRECT3DTEXTURE9 texsimon = texture->Get(ID_SIMON);
 
 	LPANIMATION ani;
-	ifstream in("Simon.txt");
+	ifstream in("Data\\Simon.txt");
 	
 	//int id, left, top, right, bottom;
 	//int i;
@@ -243,6 +244,10 @@ void LoadResources()
 	animations->Add(401, ani);
 	AddAnimation(in, sprites, ani, texsimon, 3); //fight right
 	animations->Add(402, ani);
+	AddAnimation(in, sprites, ani, texsimon, 3);//knee fight left
+	animations->Add(501, ani);
+	AddAnimation(in, sprites, ani, texsimon, 3); //knee fight right
+	animations->Add(502, ani);
 	in.close();
 
 	simon = new CSimon();
@@ -254,8 +259,10 @@ void LoadResources()
 	simon->AddAnimation(302);
 	simon->AddAnimation(401);
 	simon->AddAnimation(402);
+	simon->AddAnimation(501);
+	simon->AddAnimation(502);
 	simon->SetPosition(10.0f, 80.0f);
-	//simon->SetState(SIMON_STATE_FIGHT);
+	//simon->SetState(SIMON_STATE_IDLE);
 	objects.push_back(simon);
 
 	LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
@@ -263,12 +270,12 @@ void LoadResources()
 	sprites->Add(20011, 0, 0, 15, 15, texbrick);
 	ani = new CAnimation(100);
 	ani->Add(20011);
-	animations->Add(401, ani);
+	animations->Add(601, ani);
 
 	for (int i = 0; i < 30; i++)
 	{
 		brick = new CBrick();
-		brick->AddAnimation(401);
+		brick->AddAnimation(601);
 		brick->SetPosition(i * 15, 150.0f);
 		objects.push_back(brick);
 	}

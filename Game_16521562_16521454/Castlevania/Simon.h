@@ -3,8 +3,8 @@
 #include <vector>
 using namespace std;
 #define SIMON_WALKING_SPEED		0.1f
-#define SIMON_JUMP_SPEED		0.4f
-#define SIMON_GRAVITY			0.002f
+#define SIMON_JUMP_SPEED		0.2f
+#define SIMON_GRAVITY			0.01f
 #define SIMON_DEFLECT_SPEED		0.1f
 
 #define SIMON_STATE_IDLE		0
@@ -23,8 +23,10 @@ using namespace std;
 #define SIMON_ANI_JUMP_RIGHT		5
 #define SIMON_ANI_FIGHT_LEFT		6
 #define SIMON_ANI_FIGHT_RIGHT		7
-#define SIMON_ANI_DIE_LEFT			8
-#define SIMON_ANI_DIE_RIGHT			9
+#define SIMON_ANI_KNEE_FIGHT_LEFT	8
+#define SIMON_ANI_KNEE_FIGHT_RIGHT	9
+#define SIMON_ANI_DIE_LEFT			10
+#define SIMON_ANI_DIE_RIGHT			11
 
 #define SIMON_BBOX_IDLE_WIDTH		18
 #define SIMON_BBOX_IDLE_HEIGHT		34
