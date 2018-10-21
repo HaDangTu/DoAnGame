@@ -13,20 +13,34 @@ void CFishman::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CGameObject::Update(dt, coObjects);
 	vy += FISHMAN_GRAVITY * dt;
 
-	//
-	// TO-DO: make sure Goomba can interact with the world and to each of them too!
-	// 
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEventsResult.clear();
+	CalcPotentialCollisions(coObjects, coEvents);
 
-	x += dx;
-	y += dy;
-
-	/*if (vx < 0 && x < 0) {
-		x = 0; vx = -vx;
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
 	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-	if (vx > 0 && x > 290) {
-		x = 290; vx = -vx;
-	}*/
+		x += min_tx * dx + nx * 0.2f;
+		if (ny < 0)
+		{
+			if (nx < 0)
+				SetState(FISHMAN_STATE_WALKING_LEFT);
+			else
+				SetState(FISHMAN_STATE_WALKING_RIGHT);
+			y += min_ty * dy + ny * 0.2f;
+		}
+		else
+			y += dy;
+		if (nx != 0) vx = 0;
+	}
 }
 
 void CFishman::Render()
@@ -44,11 +58,11 @@ void CFishman::Render()
 		if (vx < 0)
 			ani = FISHMAN_ANI_FIRE_LEFT;
 		else
-			ani= FISHMAN_ANI_FIRE_RIGHT;
+			ani = FISHMAN_ANI_FIRE_RIGHT;
 	}
 	else if (vx > 0)
 		ani = FISHMAN_ANI_WALKING_RIGHT;
-	else 
+	else
 		ani = FISHMAN_ANI_WALKING_LEFT;
 	animations[ani]->Render(x, y);
 }
