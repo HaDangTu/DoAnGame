@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Whip.h"
 #include <vector>
 using namespace std;
 #define SIMON_WALKING_SPEED		0.1f
@@ -7,7 +8,7 @@ using namespace std;
 #define SIMON_GRAVITY			0.01f
 #define SIMON_DEFLECT_SPEED		0.1f
 
-#define SIMON_STATE_IDLE		0
+#define SIMON_STATE_IDLE			0
 #define SIMON_STATE_WALKING_LEFT	10
 #define SIMON_STATE_WALKING_RIGHT	20
 #define SIMON_STATE_JUMP			30
@@ -36,17 +37,19 @@ using namespace std;
 class CSimon :public CGameObject
 {
 	int mx;
-	int level;
+	CWhip *whip;
+	//int level;
 public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
-	void SetLevel(int level) { this->level = level; }
+	//void SetLevel(int level) { this->level = level; }
 	void SetState(int state);
 	CSimon():CGameObject()
 	{
 		mx = 0; //not knee
-		level = 1;
+		whip = new CWhip();
+		//level = 1;
 	}
 };
 

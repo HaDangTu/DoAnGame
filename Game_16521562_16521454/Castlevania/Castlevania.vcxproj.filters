@@ -48,6 +48,12 @@
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Candle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bat.cpp">
@@ -84,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Candle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

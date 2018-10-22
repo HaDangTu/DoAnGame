@@ -1,6 +1,6 @@
 #include "Simon.h"
 #include "debug.h"
-
+#include "Candle.h"
 
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
@@ -13,7 +13,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	coEventsResult.clear();
 	if (state != SIMON_STATE_DIE)
 		CalcPotentialCollisions(coObject, coEvents);
-
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -23,12 +22,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
 		x += min_tx * dx + nx * 0.2f;
 		y += min_ty * dy + ny * 0.2f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CCandle *> (e->obj))
+				x += dx;
+		}
 	}
 }
 
