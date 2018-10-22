@@ -76,15 +76,17 @@ class CSampleKeyHander: public CKeyEventHandler
 };
 
 CSampleKeyHander * keyHandler; 
-
 void CSampleKeyHander::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	switch (KeyCode)
 	{
 	case DIK_D:
-		if (!game->IsKeyDown(DIK_DOWN))
-		simon->SetState(SIMON_STATE_JUMP);		
+		if (!game->IsKeyDown(DIK_DOWN) && simon->jump == 1)
+		{
+			simon->jump = 0;
+			simon->SetState(SIMON_STATE_JUMP);
+		}
 		break;
 	case DIK_DOWN:
 		float temp_x, temp_y;
@@ -94,7 +96,6 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_F:
 		simon->SetState(SIMON_STATE_FIGHT);
 		FrameStart = GetTickCount();
-		//flag = true;
 		break;
 	}
 }
@@ -115,34 +116,41 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
-	
-
-	
 		if (game->IsKeyDown(DIK_DOWN))
 		{
 			if (simon->GetState() == SIMON_STATE_FIGHT)
 			{
 				now = GetTickCount();
 				if (now - FrameStart >= 300)
+				{
 					simon->SetState(SIMON_STATE_KNEE);
-				//flag == false;
+				}
 			}
-			else simon->SetState(SIMON_STATE_KNEE);
-			//simon->SetState(SIMON_STATE_KNEE);
-			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			else  simon->SetState(SIMON_STATE_KNEE);
+			if (game->IsKeyDown(DIK_LEFT)) /*simon->SetState(SIMON_STATE_WALKING_LEFT);*/simon->nx = -1;
+			else if (game->IsKeyDown(DIK_RIGHT)) /*simon->SetState(SIMON_STATE_WALKING_RIGHT);*/simon->nx = 1;
 		}
 		else
 		{
-			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-			else if (simon->GetState() == SIMON_STATE_FIGHT)
+			if (simon->GetState() == SIMON_STATE_FIGHT)
 			{
 				now = GetTickCount();
 				if (now - FrameStart >= 300)
+				{
 					simon->SetState(SIMON_STATE_IDLE);
-				//flag == false;
+				}
 			}
+			else if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		/*	else if (simon->GetState() == SIMON_STATE_FIGHT)
+			{
+				now = GetTickCount();
+				if (now - FrameStart >= 300)
+				{
+					FrameStart = now;
+					simon->SetState(SIMON_STATE_IDLE);
+				}
+			}*/
 			else simon->SetState(SIMON_STATE_IDLE);
 		}
 }
@@ -160,12 +168,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-/*
-	Load all game resources 
-	In this example: load textures, sprites, animations and mario object
 
-	TO-DO: Improve this function by loading texture,sprite,animation,object from file
-*/
 void AddAnimation(ifstream &in, CSprites *sprites,
 	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, 
 	int n);
@@ -179,6 +182,7 @@ void LoadResources()
 	texture->Add(ID_SIMON, SIMON_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
+	texture->Add(ID_FISHMAN, FISHMAN_TEXTURE_PATH, D3DCOLOR_XRGB(255, 0, 255));
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
@@ -243,31 +247,31 @@ void LoadResources()
 		objects.push_back(brick);
 	}
 
-	//ifstream in_fish("Data/Fishman.txt");
+	ifstream in_fish("Data/Fishman.txt");
 
-	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
-	//animations->Add(601, ani);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump left
-	//animations->Add(701, ani);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk left
-	//animations->Add(801, ani);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire right
-	//animations->Add(901, ani);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump right
-	//animations->Add(1001, ani);
-	//AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk right
-	//animations->Add(1101, ani);
-	//in_fish.close();
-	//fishman = new CFishman();
-	//fishman->AddAnimation(601);
-	//fishman->AddAnimation(701);
-	//fishman->AddAnimation(801);
-	//fishman->AddAnimation(901);
-	//fishman->AddAnimation(1001);
-	//fishman->AddAnimation(1101);
-	//fishman->SetPosition(100.f, 170.f);
-	//fishman->SetState(FISHMAN_STATE_JUMP);
+	LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
+	AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
+	animations->Add(601, ani);
+	AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump left
+	animations->Add(701, ani);
+	AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk left
+	animations->Add(801, ani);
+	AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire right
+	animations->Add(901, ani);
+	AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump right
+	animations->Add(1001, ani);
+	AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk right
+	animations->Add(1101, ani);
+	in_fish.close();
+	fishman = new CFishman();
+	fishman->AddAnimation(601);
+	fishman->AddAnimation(701);
+	fishman->AddAnimation(801);
+	fishman->AddAnimation(901);
+	fishman->AddAnimation(1001);
+	fishman->AddAnimation(1101);
+	fishman->SetPosition(100.f, 170.f);
+	fishman->SetState(FISHMAN_STATE_JUMP);
 	//objects.push_back(fishman);
 }
 

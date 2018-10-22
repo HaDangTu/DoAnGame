@@ -40,6 +40,8 @@ class CSimon :public CGameObject
 	CWhip *whip;
 	//int level;
 public:
+	int jump = 1;
+	int fight = 0;
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);

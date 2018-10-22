@@ -27,8 +27,9 @@ void CFishman::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		x += dx;
 
-		x += min_tx * dx + nx * 0.2f;
+		//x += min_tx * dx + nx * 0.2f;
 		if (ny < 0)
 		{
 			if (nx < 0)

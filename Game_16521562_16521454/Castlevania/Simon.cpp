@@ -26,7 +26,11 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		y += min_ty * dy + ny * 0.2f;
 
 		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+		if (ny != 0)
+		{
+			jump = 1;
+			vy = 0;
+		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -70,11 +74,12 @@ void CSimon::Render()
 		else
 			ani = SIMON_ANI_WALKING_RIGHT;
 	}
-
 	if (vy < 0 && nx < 0)
 		ani = SIMON_ANI_JUMP_LEFT;
 	else if (vy < 0 && nx > 0)
+	{
 		ani = SIMON_ANI_JUMP_RIGHT;
+	}
 	
 	animations[ani]->Render(x, y, 255);
 	RenderBoundingBox();
@@ -116,7 +121,7 @@ void CSimon::SetState(int state)
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED;
-		//break;
+		break;
 	case SIMON_STATE_IDLE:
 		vx = 0;
 		mx = 0;
@@ -126,7 +131,6 @@ void CSimon::SetState(int state)
 		mx = 1;
 		break;
 	case SIMON_STATE_FIGHT:
-		vx = 0;
 		break;
 	}
 }
