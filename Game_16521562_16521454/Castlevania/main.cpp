@@ -33,7 +33,6 @@
 #include "Brick.h"
 #include "Ghoul.h"
 #include "Bat.h"
-#include "Fishman.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -42,7 +41,6 @@ using namespace std;
 #define BRICK_TEXTURE_PATH L"brick.png"
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
-#define FISHMAN_TEXTURE_PATH L"Fishman.png"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 320
@@ -55,15 +53,11 @@ using namespace std;
 #define ID_BBOX		2
 #define ID_GHOUL    3
 #define ID_BAT      4
-#define ID_FISHMAN  5
-
 CGame *game;
 CSimon *simon;
 CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
-CFishman *fishman;
-
 //bool flag = false;
 vector<LPGAMEOBJECT> objects;
 DWORD now;
@@ -179,6 +173,7 @@ void LoadResources()
 	texture->Add(ID_SIMON, SIMON_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
+	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
@@ -243,7 +238,8 @@ void LoadResources()
 		objects.push_back(brick);
 	}
 
-	//ifstream in_fish("Data/Fishman.txt");
+	//texture->Add(ID_GHOST, L"Ghost.png", D3DCOLOR_XRGB(255, 0, 255));
+	//texture->Add(ID_BAT, L"Bat.png", D3DCOLOR_XRGB(255, 0, 255));
 
 	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
 	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
