@@ -54,6 +54,9 @@
     <ClInclude Include="Whip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InputImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bat.cpp">
@@ -96,6 +99,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Whip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

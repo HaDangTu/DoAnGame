@@ -1,6 +1,28 @@
 #include "Whip.h"
+#include "Candle.h"
+#include <vector>
+using namespace std;
 
 
+void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	CalcPotentialCollisions(coObjects, coEvents);
+
+	for (UINT i = 0; i < coEvents.size(); i++)
+	{
+		LPCOLLISIONEVENT e = coEvents[i];
+		if (dynamic_cast<CCandle *> (e->obj))
+		{
+			CCandle  *candle = dynamic_cast<CCandle *>(e->obj);
+			if (candle->GetState() != CANDLE_STATE_DISAPPEAR)
+				candle->SetState(CANDLE_STATE_DISAPPEAR);
+		}
+	}
+
+}
 
 void CWhip::Render()
 {

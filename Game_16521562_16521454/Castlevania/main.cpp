@@ -33,6 +33,7 @@
 #include "Brick.h"
 #include "Ghoul.h"
 #include "Bat.h"
+#include "Candle.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -41,6 +42,8 @@ using namespace std;
 #define BRICK_TEXTURE_PATH L"brick.png"
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
+#define CANDLE_TEXTURE_PATH L"castlevania_texture\\Weapon\\Candle.png"
+#define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 320
@@ -53,6 +56,9 @@ using namespace std;
 #define ID_BBOX		2
 #define ID_GHOUL    3
 #define ID_BAT      4
+#define ID_CANDLE	5
+#define ID_WHIP		6
+
 CGame *game;
 CSimon *simon;
 CBrick *brick;
@@ -109,36 +115,38 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
-	
-
-	
-		if (game->IsKeyDown(DIK_DOWN))
+	if (simon->GetState() == SIMON_STATE_FIGHT)
+	{
+		now = GetTickCount();
+		if (now - FrameStart >= 300)
+			simon->SetState(simon->GetPreviousState());
+	}
+	else /*simon->SetState(simon->GetPreviousState());*/
+	if (game->IsKeyDown(DIK_DOWN))
+	{
+		simon->SetState(SIMON_STATE_KNEE);
+		/*if (simon->GetState() == SIMON_STATE_FIGHT)
 		{
-			if (simon->GetState() == SIMON_STATE_FIGHT)
-			{
-				now = GetTickCount();
-				if (now - FrameStart >= 300)
-					simon->SetState(SIMON_STATE_KNEE);
-				//flag == false;
-			}
-			else simon->SetState(SIMON_STATE_KNEE);
-			//simon->SetState(SIMON_STATE_KNEE);
-			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			now = GetTickCount();
+			if (now - FrameStart >= 300)
+				simon->SetState(simon->GetPreviousState());
 		}
-		else
+		else simon->SetState(simon->GetPreviousState());*/		
+		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+	}
+	else
+	{
+		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+		/*else if (simon->GetState() == SIMON_STATE_FIGHT)
 		{
-			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-			else if (simon->GetState() == SIMON_STATE_FIGHT)
-			{
-				now = GetTickCount();
-				if (now - FrameStart >= 300)
-					simon->SetState(SIMON_STATE_IDLE);
-				//flag == false;
-			}
-			else simon->SetState(SIMON_STATE_IDLE);
-		}
+			now = GetTickCount();
+			if (now - FrameStart >= 300)
+				simon->SetState(simon->GetPreviousState());
+		}*/
+		else simon->SetState(SIMON_STATE_IDLE);
+	}
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -174,13 +182,14 @@ void LoadResources()
 	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
+	texture->Add(ID_WHIP, WHIP_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
+
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
 
 	
 	LPDIRECT3DTEXTURE9 texsimon = texture->Get(ID_SIMON);
-
 	LPANIMATION ani;
 	ifstream in("Data\\Simon.txt");
 	
@@ -237,6 +246,19 @@ void LoadResources()
 		brick->SetPosition(i * 15, 150.0f);
 		objects.push_back(brick);
 	}
+
+	LPDIRECT3DTEXTURE9 texcandle = texture->Get(ID_CANDLE);
+	in.open("Data\\Candle.txt");
+	AddAnimation(in, sprites, ani, texcandle, 2);
+	in.close();
+	animations->Add(701, ani);
+
+	CCandle *candle = new CCandle();
+	candle->AddAnimation(701);
+	candle->SetPosition(80.0f, 116.0f);
+	candle->SetState(0);
+	objects.push_back(candle);
+
 
 	//texture->Add(ID_GHOST, L"Ghost.png", D3DCOLOR_XRGB(255, 0, 255));
 	//texture->Add(ID_BAT, L"Bat.png", D3DCOLOR_XRGB(255, 0, 255));

@@ -1,8 +1,11 @@
 #pragma once
 #include "GameObject.h"
 #include "Whip.h"
+#include "InputImage.h"
 #include <vector>
 using namespace std;
+#define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
+
 #define SIMON_WALKING_SPEED		0.1f
 #define SIMON_JUMP_SPEED		0.2f
 #define SIMON_GRAVITY			0.01f
@@ -31,25 +34,33 @@ using namespace std;
 
 #define SIMON_BBOX_IDLE_WIDTH		18
 #define SIMON_BBOX_IDLE_HEIGHT		34
+
 #define SIMON_BBOX_KNEE_WIDTH		18
 #define SIMON_BBOX_KNEE_HEIGHT		25
+
 
 class CSimon :public CGameObject
 {
 	int mx;
+	int previousstate;
+	//bool isAttacking;
 	CWhip *whip;
 	//int level;
 public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
+	int GetPreviousState();
 	//void SetLevel(int level) { this->level = level; }
 	void SetState(int state);
-	CSimon():CGameObject()
+	CSimon() :CGameObject()
 	{
 		mx = 0; //not knee
+		//isAttacking = false;
+		previousstate = state;
 		whip = new CWhip();
-		//level = 1;
+		
 	}
+
 };
 

@@ -2,8 +2,12 @@
 #include "GameObject.h"
 #include <vector>
 using namespace std;
-#define SHORT_WHIP	0
-#define LONG_WHIP	1
+
+#define SHORT_WHIP	1
+#define LONG_WHIP	2
+
+#define WHIP_ANI_LEFT		0
+#define WHIP_ANI_RIGHT		1
 
 #define SHORT_WHIP_BBOX_WIDTH	28
 #define SHORT_WHIP_BBOX_HEIGHT	10
