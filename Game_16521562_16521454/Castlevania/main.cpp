@@ -33,7 +33,7 @@
 #include "Brick.h"
 #include "Ghoul.h"
 #include "Bat.h"
-#include "Candle.h"
+#include "Fishman.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -42,7 +42,8 @@ using namespace std;
 #define BRICK_TEXTURE_PATH L"brick.png"
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
-#define CANDLE_TEXTURE_PATH L"castlevania_texture\\Weapon\\Candle.png"
+#define FISHMAN_TEXTURE_PATH L"Fishman.png"
+
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -54,13 +55,15 @@ using namespace std;
 #define ID_BBOX		2
 #define ID_GHOUL    3
 #define ID_BAT      4
-#define ID_CANDLE	5
+#define ID_FISHMAN  5
+
 CGame *game;
 CSimon *simon;
 CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
-CCandle *candle;
+CFishman *fishman;
+
 //bool flag = false;
 vector<LPGAMEOBJECT> objects;
 DWORD now;
@@ -176,7 +179,6 @@ void LoadResources()
 	texture->Add(ID_SIMON, SIMON_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
-	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
@@ -187,50 +189,7 @@ void LoadResources()
 	LPANIMATION ani;
 	ifstream in("Data\\Simon.txt");
 	
-	//int id, left, top, right, bottom;
-	//int i;
-	//ifstream in("Simon.txt");
-	//ani = new CAnimation(100);
-	//for (i = 0; i < 3; i++)				//walk left
-	//{
-	//	LoadDataFromFile(in, id, left, top, right, bottom);
-	//	sprites->Add(id, left, top, right, bottom, texsimon);
-	//	ani->Add(id);
-	//}
-	//animations->Add(101, ani);
 
-	//ani = new CAnimation(100);
-	//for (i = 0; i < 3; i++)				//walk right
-	//{
-	//	LoadDataFromFile(in, id, left, top, right, bottom);
-	//	sprites->Add(id, left, top, right, bottom, texsimon);
-	//	ani->Add(id);
-	//}
-	//animations->Add(102, ani);
-
-	//ani = new CAnimation(100);
-	//LoadDataFromFile(in, id, left, top, right, bottom);
-	//sprites->Add(id, left, top, right, bottom, texsimon);
-	//ani->Add(id);
-	//animations->Add(201, ani);
-
-	//ani = new CAnimation(100);
-	//LoadDataFromFile(in, id, left, top, right, bottom);
-	//sprites->Add(id, left, top, right, bottom, texsimon);
-	//ani->Add(id);
-	//animations->Add(202, ani);
-
-	//ani = new CAnimation(100);
-	//LoadDataFromFile(in, id, left, top, right, bottom);
-	//sprites->Add(id, left, top, right, bottom, texsimon);
-	//ani->Add(id);
-	//animations->Add(301, ani);
-
-	//ani = new CAnimation(100);
-	//LoadDataFromFile(in, id, left, top, right, bottom, true);
-	//sprites->Add(id, left, top, right, bottom, texsimon);
-	//ani->Add(id);
-	//animations->Add(302, ani);
 
 	AddAnimation(in, sprites, ani, texsimon, 3);//walk left
 	animations->Add(101, ani);
@@ -284,70 +243,32 @@ void LoadResources()
 		objects.push_back(brick);
 	}
 
-	LPDIRECT3DTEXTURE9 texcandle = texture->Get(ID_CANDLE);
-	in.open("Data\\Candle.txt");
-	AddAnimation(in, sprites, ani, texcandle, 2);
-	animations->Add(701, ani);
-	in.close();
-	candle = new CCandle();
-	candle->AddAnimation(701);
-	candle->SetPosition(50.0f, 116.0f);
-	objects.push_back(candle);
+	//ifstream in_fish("Data/Fishman.txt");
 
-	//texture->Add(ID_GHOST, L"Ghost.png", D3DCOLOR_XRGB(255, 0, 255));
-	//texture->Add(ID_BAT, L"Bat.png", D3DCOLOR_XRGB(255, 0, 255));
-
-
-	//LPDIRECT3DTEXTURE9 texghost = texture->Get(ID_GHOST);
-	//sprites->Add(10001, 0, 0, 33, 64, texghost); //walk left
-	//sprites->Add(10001, 0, 0, 33, 64, texghost);
-	//sprites->Add(10003, 77, 0, 109, 63, texghost);//walk right
-	//sprites->Add(10004, 113, 0, 145, 62, texghost);
-
-	//LPDIRECT3DTEXTURE9 texbat = texture->Get(ID_BAT);
-	//sprites->Add(20001, 31, 4, 64, 32, texbat); //fly left
-	//sprites->Add(20002, 64, 8, 95, 28, texbat);
-	//sprites->Add(20003, 96, 0, 128, 31, texbat);
-	//sprites->Add(20004, 132, 2, 167, 31, texbat);// fly right
-	//sprites->Add(20005, 167, 8, 199, 27, texbat);
-	//sprites->Add(20006, 198, 5, 231, 31, texbat);
-
-	//LPANIMATION ani;
-	//ani = new CAnimation(100);
-	//ani->Add(10001);
-	//ani->Add(10002);
-	//animations->Add(400, ani);
-
-	//ani = new CAnimation(100);
-	//ani->Add(10003);
-	//ani->Add(10004);
-	//animations->Add(401, ani);
-
-	//ani = new CAnimation(100);
-	//ani->Add(20001);
-	//ani->Add(20002);
-	//ani->Add(20003);
-	//animations->Add(402, ani);
-
-	//ani = new CAnimation(100);
-	//ani->Add(20004);
-	//ani->Add(20005);
-	//ani->Add(20006);
-	//animations->Add(403, ani);
-
-	//ghost = new CGhost();
-	//ghost->AddAnimation(401);
-	//ghost->AddAnimation(400);
-	//ghost->SetPosition(200, 135);
-	//ghost->SetState(GHOST_ANI_RIGHT);
-	//objects.push_back(ghost);
-	//bat = new CBat();
-	//bat->AddAnimation(403);
-	//bat->AddAnimation(402);
-	//bat->SetPosition(200, 30);
-	//bat->SetState(BAT_ANI_LEFT);
-	//bat->SetHeightFly(30);
-	//objects.push_back(bat);
+	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
+	//animations->Add(601, ani);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump left
+	//animations->Add(701, ani);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk left
+	//animations->Add(801, ani);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire right
+	//animations->Add(901, ani);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//jump right
+	//animations->Add(1001, ani);
+	//AddAnimation(in_fish, sprites, ani, texfishman, 2);//walk right
+	//animations->Add(1101, ani);
+	//in_fish.close();
+	//fishman = new CFishman();
+	//fishman->AddAnimation(601);
+	//fishman->AddAnimation(701);
+	//fishman->AddAnimation(801);
+	//fishman->AddAnimation(901);
+	//fishman->AddAnimation(1001);
+	//fishman->AddAnimation(1101);
+	//fishman->SetPosition(100.f, 170.f);
+	//fishman->SetState(FISHMAN_STATE_JUMP);
+	//objects.push_back(fishman);
 }
 
 void AddAnimation(ifstream &in, CSprites * sprites, 
