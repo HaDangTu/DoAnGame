@@ -38,7 +38,8 @@ using namespace std;
 #define SIMON_BBOX_KNEE_WIDTH		18
 #define SIMON_BBOX_KNEE_HEIGHT		25
 
-
+#define SIMON_BBOX_KNEE_FIGHT_WIDTH		29
+#define SIMON_BBOX_KNEE_FIGHT_HEIGHT	22
 class CSimon :public CGameObject
 {
 	int mx;

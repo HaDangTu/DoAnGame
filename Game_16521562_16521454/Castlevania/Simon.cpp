@@ -100,8 +100,13 @@ void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bo
 	{
 		right = x + SIMON_BBOX_KNEE_WIDTH;
 		bottom = y + SIMON_BBOX_KNEE_HEIGHT;
+		/*if (state == SIMON_STATE_FIGHT)
+		{
+			right = x + SIMON_BBOX_KNEE_FIGHT_WIDTH;
+			bottom = y + SIMON_BBOX_KNEE_FIGHT_HEIGHT;
+		}*/
 	}
-	else
+	else 
 	{
 		right = x + SIMON_BBOX_IDLE_WIDTH;
 		bottom = y + SIMON_BBOX_IDLE_HEIGHT;
