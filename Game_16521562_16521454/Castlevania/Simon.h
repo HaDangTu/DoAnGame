@@ -38,15 +38,13 @@ using namespace std;
 #define SIMON_BBOX_KNEE_WIDTH		18
 #define SIMON_BBOX_KNEE_HEIGHT		25
 
-#define SIMON_BBOX_KNEE_FIGHT_WIDTH		29
-#define SIMON_BBOX_KNEE_FIGHT_HEIGHT	22
+#define SIMON_BBOX_KNEE_FIGHT_WIDTH		18
+#define SIMON_BBOX_KNEE_FIGHT_HEIGHT	25
 class CSimon :public CGameObject
 {
 	int mx;
 	int previousstate;
-	//bool isAttacking;
 	CWhip *whip;
-	//int level;
 public:
 	int jump = 1;
 	int fight = 0;
@@ -54,12 +52,10 @@ public:
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
 	int GetPreviousState();
-	//void SetLevel(int level) { this->level = level; }
 	void SetState(int state);
 	CSimon() :CGameObject()
 	{
-		mx = 0; //not knee
-		//isAttacking = false;
+		mx = 0;
 		previousstate = state;
 		whip = new CWhip();
 		
