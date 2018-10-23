@@ -43,7 +43,7 @@ using namespace std;
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
 #define CANDLE_TEXTURE_PATH L"castlevania_texture\\Weapon\\Candle.png"
-#define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
+
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 320
@@ -57,7 +57,7 @@ using namespace std;
 #define ID_GHOUL    3
 #define ID_BAT      4
 #define ID_CANDLE	5
-#define ID_WHIP		6
+
 
 CGame *game;
 CSimon *simon;
@@ -182,8 +182,6 @@ void LoadResources()
 	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
-	texture->Add(ID_WHIP, WHIP_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
-
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();

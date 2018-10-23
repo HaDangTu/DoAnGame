@@ -1,8 +1,34 @@
 #include "Whip.h"
 #include "Candle.h"
+#include "InputImage.h"
 #include <vector>
+
+#define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
+#define ID_WHIP		6
 using namespace std;
 
+
+void CWhip::LoadAnimaion()
+{
+	CTextures *texture = CTextures::GetInstance();
+	texture->Add(ID_WHIP, WHIP_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
+
+	CSprites *sprites = CSprites::GetInstance();
+	CAnimations *animations = CAnimations::GetInstance();
+
+	ifstream in("Data\\Whip.txt");
+	LPANIMATION ani;
+	LPDIRECT3DTEXTURE9 texwhip = texture->Get(ID_WHIP);
+	ani = new CAnimation(100);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(801, ani);
+	in.close();
+}
+
+CWhip::CWhip()
+{
+	LoadAnimaion();
+}
 
 void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

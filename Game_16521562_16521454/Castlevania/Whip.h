@@ -18,8 +18,10 @@ using namespace std;
 class CWhip :
 	public CGameObject
 {
+	void LoadAnimaion();
 	//int level;
 public:
+	CWhip();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
