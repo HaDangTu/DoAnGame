@@ -28,10 +28,7 @@ void CWhip::Render()
 {
 	animations[0]->Render(x, y);
 }
-void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
-{
 
-}
 void CWhip::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	left = x;
