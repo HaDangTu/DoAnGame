@@ -216,11 +216,52 @@ void CGame::SweptAABB(
 
 	t = -1.0f;			// no collision
 	nx = ny = 0;
+	if (sl == 80.0f)
+	{
 
+	}
 	//
 	// Broad-phase test 
 	//
+	bool mx=1, my=1;
+	if(ml < sl && sl < mr && mr < sr)
+	{
+		mx = 0; 
+	}
+	else if (sl < ml && ml < mr && mr < sr)
+	{
+		mx = 0;
+	}
+	else if (sl < ml && ml < sr && sr < mr)
+	{
+		mx = 0;
+	}
+	else if (ml < sl && sl < sr && sr < mr)
+	{
+		mx = 0;
+	}
 
+	if (mt < st && st < mb && mb < sb)
+	{
+		my = 0;
+	}
+	else if (st < mt && mt < mb && mb < sb)
+	{
+		my = 0;
+	}
+	else if (st < mt && mt < sb && sb < mb)
+	{
+		my = 0;
+	}
+	else if (mt < st && st < sb && sb < mb)
+	{
+		my = 0;
+	}
+
+	if (mx == 0 && my == 0)
+	{
+		t = 0; return;
+	}
 	float bl = dx > 0 ? ml : ml + dx;
 	float bt = dy > 0 ? mt : mt + dy;
 	float br = dx > 0 ? mr + dx : mr;

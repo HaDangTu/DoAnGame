@@ -27,6 +27,7 @@ public:
 	CWhip();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
+	void Render(int ani);
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
 };
 

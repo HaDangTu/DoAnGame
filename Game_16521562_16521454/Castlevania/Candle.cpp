@@ -5,7 +5,10 @@
 void CCandle::Render()
 {
 	if (state != CANDLE_STATE_DISAPPEAR)
+	{
+		//RenderBoundingBox(200);
 		animations[0]->Render(x, y);
+	}
 	else
 	{
 	}
@@ -21,6 +24,7 @@ void CCandle::GetBoundingBox(float & left, float & top, float & right, float & b
 
 void CCandle::SetState(int state)
 {
+	CGameObject::SetState(state);
 	switch (state)
 	{
 	case CANDLE_STATE_DISAPPEAR:

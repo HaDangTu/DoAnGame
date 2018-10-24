@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define ID_BBOX -100		// special texture to draw object bounding box
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
@@ -59,7 +59,7 @@ public:
 
 	int GetState() { return this->state; }
 
-	void RenderBoundingBox();
+	void RenderBoundingBox(int alpha);
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);

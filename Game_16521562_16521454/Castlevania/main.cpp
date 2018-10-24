@@ -53,7 +53,6 @@ using namespace std;
 
 #define ID_SIMON	0
 #define ID_BRICK	1
-#define ID_BBOX		2
 #define ID_GHOUL    3
 #define ID_BAT      4
 #define ID_CANDLE	5
@@ -122,33 +121,61 @@ void CSampleKeyHander::KeyState(BYTE *states)
 	{
 		now = GetTickCount();
 		if (now - FrameStart >= 300)
-			simon->SetState(simon->GetPreviousState());
+		{
+			if (game->IsKeyDown(DIK_DOWN))
+			{
+				simon->SetState(SIMON_STATE_KNEE);
+				/*if (simon->GetState() == SIMON_STATE_FIGHT)
+				{
+					now = GetTickCount();
+					if (now - FrameStart >= 300)
+						simon->SetState(simon->GetPreviousState());
+				}
+				else simon->SetState(simon->GetPreviousState());*/
+				if (game->IsKeyDown(DIK_LEFT)) simon->nx = -1;
+				else if (game->IsKeyDown(DIK_RIGHT))  simon->nx = 1;
+			}
+			else
+			{
+				if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+				else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+				/*else if (simon->GetState() == SIMON_STATE_FIGHT)
+				{
+					now = GetTickCount();
+					if (now - FrameStart >= 300)
+						simon->SetState(simon->GetPreviousState());
+				}*/
+				else simon->SetState(SIMON_STATE_IDLE);
+			}
+		}
 	}
 	else /*simon->SetState(simon->GetPreviousState());*/
-	if (game->IsKeyDown(DIK_DOWN))
 	{
-		simon->SetState(SIMON_STATE_KNEE);
-		/*if (simon->GetState() == SIMON_STATE_FIGHT)
+		if (game->IsKeyDown(DIK_DOWN))
 		{
-			now = GetTickCount();
-			if (now - FrameStart >= 300)
-				simon->SetState(simon->GetPreviousState());
+			simon->SetState(SIMON_STATE_KNEE);
+			/*if (simon->GetState() == SIMON_STATE_FIGHT)
+			{
+				now = GetTickCount();
+				if (now - FrameStart >= 300)
+					simon->SetState(simon->GetPreviousState());
+			}
+			else simon->SetState(simon->GetPreviousState());*/
+			if (game->IsKeyDown(DIK_LEFT)) simon->nx = -1;
+			else if (game->IsKeyDown(DIK_RIGHT))  simon->nx = 1;
 		}
-		else simon->SetState(simon->GetPreviousState());*/		
-		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-	}
-	else
-	{
-		if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-		else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-		/*else if (simon->GetState() == SIMON_STATE_FIGHT)
+		else
 		{
-			now = GetTickCount();
-			if (now - FrameStart >= 300)
-				simon->SetState(simon->GetPreviousState());
-		}*/
-		else simon->SetState(SIMON_STATE_IDLE);
+			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
+			/*else if (simon->GetState() == SIMON_STATE_FIGHT)
+			{
+				now = GetTickCount();
+				if (now - FrameStart >= 300)
+					simon->SetState(simon->GetPreviousState());
+			}*/
+			else simon->SetState(SIMON_STATE_IDLE);
+		}
 	}
 }
 
@@ -182,8 +209,8 @@ void LoadResources()
 {
 	CTextures *texture = CTextures::GetInstance();
 	texture->Add(ID_SIMON, SIMON_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
-	texture->Add(ID_BRICK, BRICK_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
-	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
+	texture->Add(ID_BRICK, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
+	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
 
 	CSprites *sprites = CSprites::GetInstance();
@@ -194,7 +221,7 @@ void LoadResources()
 	LPANIMATION ani;
 	ifstream in("Data\\Simon.txt");
 	
-
+	
 
 	AddAnimation(in, sprites, ani, texsimon, 3);//walk left
 	animations->Add(101, ani);
@@ -257,7 +284,7 @@ void LoadResources()
 	CCandle *candle = new CCandle();
 	candle->AddAnimation(701);
 	candle->SetPosition(80.0f, 116.0f);
-	candle->SetState(0);
+	candle->SetState(CANDLE_STATE_NORMAL);
 	objects.push_back(candle);
 
 

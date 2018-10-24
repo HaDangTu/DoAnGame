@@ -5,6 +5,7 @@
 void CBrick::Render()
 {
 	animations[0]->Render(x, y);
+	RenderBoundingBox(32);
 }
 
 void CBrick::GetBoundingBox(float & left, float & top, float & right, float & bottom)

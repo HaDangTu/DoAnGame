@@ -34,21 +34,49 @@ CWhip::CWhip()
 
 void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	/*vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEventsResult.clear();
-	for (INT i = 0; i < coEventsResult.size(); i++)
+	CalcPotentialCollisions(coObjects, coEvents);
+	if (coEvents.size() == 0)
 	{
-		LPCOLLISIONEVENT e = coEventsResult[i];
-		if (dynamic_cast<CCandle *> (e->obj))
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		for (UINT i = 0; i < coEvents.size(); i++)
+		{
+			LPCOLLISIONEVENT c = coEvents[i];
+			if (c->t ==0 )
+				coEventsResult.push_back(coEvents[i]);
+		}
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CCandle *> (e->obj))
 			{
-			e->obj->GetBoundingBox();
+				CCandle *candle = dynamic_cast<CCandle *>(e->obj);
+				candle->SetState(CANDLE_STATE_DISAPPEAR);
 			}
-		}*/
+		}
+	}
 }
-
 void CWhip::Render()
 {
+}
+void CWhip::Render(int ani)
+{
+	if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+	{
+		RenderBoundingBox(200);
+		animations[0]->Render(x + 46, y + 1, x + 38, y - 1, x, y, 255);
+	}
+	else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+	{
+		RenderBoundingBox(200);
+		animations[1]->Render(x -29, y + 2, x - 38, y -1, x, y, 255);
+	}
 }
 
 void CWhip::GetBoundingBox(float & left, float & top, float & right, float & bottom)

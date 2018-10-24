@@ -15,7 +15,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		CalcPotentialCollisions(coObject, coEvents);
 
 	if (state == SIMON_STATE_FIGHT)
+	{
+		if(nx<0)
+			whip->SetPosition(x - 22, y + 5);
+		else
+			whip->SetPosition(x + 22, y + 5);
 		whip->Update(dt, coObject);
+	}
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -91,16 +97,9 @@ void CSimon::Render()
 		ani = SIMON_ANI_JUMP_LEFT;
 	else if (vy < 0 && nx > 0)
 		ani = SIMON_ANI_JUMP_RIGHT;
-	if(ani==SIMON_ANI_FIGHT_LEFT) 
-		whip->animations[0]->Render(x + 24, y + 6, x + 16, y + 4, x-22, y+5, 255);
-	else if (ani == SIMON_ANI_FIGHT_RIGHT) 
-		whip->animations[1]->Render(x - 7, y + 7, x - 16, y + 4, x + 22, y + 5, 255);
-	else if (ani == SIMON_ANI_KNEE_FIGHT_LEFT)
-		whip->animations[0]->Render(x + 24, y + 6, x + 16, y + 4, x - 22, y + 5, 255);
-	else if (ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
-		whip->animations[1]->Render(x - 7, y + 7, x - 16, y + 4, x + 22, y + 5, 255);
+	whip->Render(ani);
 	animations[ani]->Render(x, y, 255);
-	RenderBoundingBox();
+	RenderBoundingBox(200);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -112,11 +111,6 @@ void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bo
 	{
 		right = x + SIMON_BBOX_KNEE_WIDTH;
 		bottom = y + SIMON_BBOX_KNEE_HEIGHT;
-		/*if (state == SIMON_STATE_FIGHT)
-		{
-			right = x + SIMON_BBOX_KNEE_FIGHT_WIDTH;
-			bottom = y + SIMON_BBOX_KNEE_FIGHT_HEIGHT;
-		}*/
 	}
 	else 
 	{
