@@ -18,6 +18,9 @@ using namespace std;
 class CWhip :
 	public CGameObject
 {
+	DWORD lastFrameTime;
+	int currentFrame;
+	vector<LPANIMATION_FRAME> frames;
 	void LoadAnimaion();
 	//int level;
 public:

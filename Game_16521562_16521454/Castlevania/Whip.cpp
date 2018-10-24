@@ -2,7 +2,7 @@
 #include "Candle.h"
 #include "InputImage.h"
 #include <vector>
-
+#include "Simon.h"
 #define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
 #define ID_WHIP		6
 using namespace std;
@@ -21,7 +21,9 @@ void CWhip::LoadAnimaion()
 	LPDIRECT3DTEXTURE9 texwhip = texture->Get(ID_WHIP);
 	ani = new CAnimation(100);
 	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
-	animations->Add(801, ani);
+	animations->Add(2000, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2001, ani);
 	in.close();
 }
 
@@ -32,27 +34,21 @@ CWhip::CWhip()
 
 void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vector<LPCOLLISIONEVENT> coEvents;
+	/*vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	CalcPotentialCollisions(coObjects, coEvents);
-
-	for (UINT i = 0; i < coEvents.size(); i++)
+	coEventsResult.clear();
+	for (INT i = 0; i < coEventsResult.size(); i++)
 	{
-		LPCOLLISIONEVENT e = coEvents[i];
+		LPCOLLISIONEVENT e = coEventsResult[i];
 		if (dynamic_cast<CCandle *> (e->obj))
-		{
-			CCandle  *candle = dynamic_cast<CCandle *>(e->obj);
-			if (candle->GetState() != CANDLE_STATE_DISAPPEAR)
-				candle->SetState(CANDLE_STATE_DISAPPEAR);
-		}
-	}
-
+			{
+			e->obj->GetBoundingBox();
+			}
+		}*/
 }
 
 void CWhip::Render()
 {
-	animations[0]->Render(x, y);
 }
 
 void CWhip::GetBoundingBox(float & left, float & top, float & right, float & bottom)

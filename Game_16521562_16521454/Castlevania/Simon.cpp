@@ -29,12 +29,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+		if (ny != 0) {
+			vy = 0; jump = 1;
+		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CCandle *> (e->obj))
+			{
 				x += dx;
+				y += dy;
+			}
 		}
 	}
 }
@@ -72,7 +77,7 @@ void CSimon::Render()
 		if (nx < 0)
 		{
 			ani = SIMON_ANI_WALKING_LEFT;
-			if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_FIGHT_LEFT;
+			if (state == SIMON_STATE_FIGHT) ani =SIMON_ANI_FIGHT_LEFT;
 		}
 		else
 		{
@@ -81,12 +86,19 @@ void CSimon::Render()
 		}
 	}
 
-	
+
 	if (vy < 0 && nx < 0)
 		ani = SIMON_ANI_JUMP_LEFT;
 	else if (vy < 0 && nx > 0)
 		ani = SIMON_ANI_JUMP_RIGHT;
-	
+	if(ani==SIMON_ANI_FIGHT_LEFT) 
+		whip->animations[0]->Render(x + 24, y + 6, x + 16, y + 4, x-22, y+5, 255);
+	else if (ani == SIMON_ANI_FIGHT_RIGHT) 
+		whip->animations[1]->Render(x - 7, y + 7, x - 16, y + 4, x + 22, y + 5, 255);
+	else if (ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+		whip->animations[0]->Render(x + 24, y + 6, x + 16, y + 4, x - 22, y + 5, 255);
+	else if (ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+		whip->animations[1]->Render(x - 7, y + 7, x - 16, y + 4, x + 22, y + 5, 255);
 	animations[ani]->Render(x, y, 255);
 	RenderBoundingBox();
 }

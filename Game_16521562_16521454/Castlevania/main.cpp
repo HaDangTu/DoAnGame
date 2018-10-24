@@ -83,8 +83,11 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_D:
-		if (!game->IsKeyDown(DIK_DOWN))
-		simon->SetState(SIMON_STATE_JUMP);		
+		if (!game->IsKeyDown(DIK_DOWN) && simon->jump==1)
+		{
+			simon->SetState(SIMON_STATE_JUMP);
+			simon->jump = 0;
+		}
 		break;
 	case DIK_DOWN:
 		float temp_x, temp_y;
@@ -258,8 +261,7 @@ void LoadResources()
 	objects.push_back(candle);
 
 
-	//texture->Add(ID_GHOST, L"Ghost.png", D3DCOLOR_XRGB(255, 0, 255));
-	//texture->Add(ID_BAT, L"Bat.png", D3DCOLOR_XRGB(255, 0, 255));
+	
 
 	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
 	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
