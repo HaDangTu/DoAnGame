@@ -71,7 +71,7 @@ void CAnimation::Render(float x, float y, int alpha)
 	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 }
 
-void CAnimation::Render(float x, float y,float x1,float y1,float x2,float y2, int alpha)
+void CAnimation::RenderWhip(bool& fight, float x, float y, float x1, float y1, float x2, float y2, int alpha)
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -90,12 +90,15 @@ void CAnimation::Render(float x, float y,float x1,float y1,float x2,float y2, in
 		}
 
 	}
-	if(currentFrame==0)
+	if (currentFrame == 0)
 		frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
-	else if(currentFrame==1)
+	else if (currentFrame == 1)
 		frames[currentFrame]->GetSprite()->Draw(x1, y1, alpha);
 	else
+	{
 		frames[currentFrame]->GetSprite()->Draw(x2, y2, alpha);
+		fight = true;
+	}
 }
 CAnimations * CAnimations::__instance = NULL;
 
