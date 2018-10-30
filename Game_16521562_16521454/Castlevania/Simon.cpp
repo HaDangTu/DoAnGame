@@ -1,7 +1,7 @@
 #include "Simon.h"
 #include "debug.h"
 #include "Candle.h"
-
+#include "Game.h"
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	CGameObject::Update(dt);
@@ -26,6 +26,9 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	{
 		x += dx;
 		y += dy;
+		CGame *game = CGame::GetInstance();
+		game->SetCamera(x - 50.f, 0.0f);
+		
 	}
 	else
 	{
@@ -99,7 +102,7 @@ void CSimon::Render()
 		ani = SIMON_ANI_JUMP_RIGHT;
 	whip->Render(ani);
 	animations[ani]->Render(x, y, 255);
-	RenderBoundingBox(200);
+	//RenderBoundingBox(200);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)

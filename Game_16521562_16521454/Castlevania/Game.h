@@ -22,6 +22,7 @@ typedef CKeyEventHandler * LPKEYEVENTHANDLER;
 
 class CGame
 {
+	float cam_x, cam_y;
 	static CGame * __instance;
 	HWND hWnd;									// Window handle
 
@@ -42,6 +43,7 @@ class CGame
 public:
 	void InitKeyboard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
+	void SetCamera(float cam_x, float cam_y) { this->cam_x = cam_x; this->cam_y = cam_y; }
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 
 	int IsKeyDown(int KeyCode);

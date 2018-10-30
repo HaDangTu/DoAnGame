@@ -34,6 +34,8 @@
 #include "Ghoul.h"
 #include "Bat.h"
 #include "Candle.h"
+#include "Map.h"
+#include "HidenObject.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -43,7 +45,7 @@ using namespace std;
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
 #define CANDLE_TEXTURE_PATH L"castlevania_texture\\Weapon\\Candle.png"
-
+#define MAP_LEVEL1_TEXTURE_PATH L"castlevania_texture\\Background\\Level 1 Entrance.png"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 320
@@ -56,17 +58,20 @@ using namespace std;
 #define ID_GHOUL    3
 #define ID_BAT      4
 #define ID_CANDLE	5
-
+#define ID_MAP_LEVEL1		6
 
 CGame *game;
 CSimon *simon;
 CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
+CMap *map1;
 //bool flag = false;
 vector<LPGAMEOBJECT> objects;
 DWORD now;
 DWORD FrameStart;
+CHidenObject *hidenObject;
+
 class CSampleKeyHander: public CKeyEventHandler
 {
 	virtual void KeyState(BYTE *states);
@@ -210,7 +215,7 @@ void LoadResources()
 	CTextures *texture = CTextures::GetInstance();
 	texture->Add(ID_SIMON, SIMON_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_BRICK, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
-	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
 
 	CSprites *sprites = CSprites::GetInstance();
@@ -260,7 +265,7 @@ void LoadResources()
 	//simon->SetState(SIMON_STATE_IDLE);
 	objects.push_back(simon);
 
-	LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
+	/*LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
 	
 	sprites->Add(20011, 0, 0, 15, 15, texbrick);
 	ani = new CAnimation(100);
@@ -273,8 +278,13 @@ void LoadResources()
 		brick->AddAnimation(601);
 		brick->SetPosition(i * 15, 150.0f);
 		objects.push_back(brick);
-	}
+	}*/
 
+	hidenObject = new CHidenObject();
+	hidenObject->SetPosition(0.0f, 146.0f);
+	hidenObject->SetSize(769.0f, 15.0f);
+	objects.push_back(hidenObject);
+	
 	LPDIRECT3DTEXTURE9 texcandle = texture->Get(ID_CANDLE);
 	in.open("Data\\Candle.txt");
 	AddAnimation(in, sprites, ani, texcandle, 2);
@@ -288,8 +298,16 @@ void LoadResources()
 	objects.push_back(candle);
 
 
-	
+	texture->Add(ID_MAP_LEVEL1, MAP_LEVEL1_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	LPDIRECT3DTEXTURE9 texmap = texture->Get(ID_MAP_LEVEL1);
+	sprites->Add(20001, 0, 0, 768, 184, texmap);
+	ani = new CAnimation(100);
+	ani->Add(20001);
+	animations->Add(801, ani);
 
+	map1 = new CMap();
+	map1->AddAnimation(801);
+	map1->SetPosition(0.0f, 0.0f);
 	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
 	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
 	//animations->Add(601, ani);
@@ -379,6 +397,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
+		map1->Render();
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 
