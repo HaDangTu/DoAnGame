@@ -27,7 +27,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		x += dx;
 		y += dy;
 		CGame *game = CGame::GetInstance();
-		game->SetCamera(x - 50.f, 0.0f);
+		float cx, cy;		
+		game->GetCamera(cx, cy);
+		DebugOut(L"x = %f, cx = %f\n", x, cx);
+		if (x > 160.0f)
+			game->SetCamera(x - 150.0f, 0.0f);
+		if (cx <= 0)
+			game->SetCamera(0.0f, 0.0f);
 		
 	}
 	else
