@@ -1,22 +1,4 @@
-/* =============================================================
-	INTRODUCTION TO GAME PROGRAMMING SE102
-	
-	SAMPLE 04 - COLLISION
 
-	This sample illustrates how to:
-
-		1/ Implement SweptAABB algorithm between moving objects
-		2/ Implement a simple (yet effective) collision frame work
-
-	Key functions: 
-		CGame::SweptAABB
-		CGameObject::SweptAABBEx
-		CGameObject::CalcPotentialCollisions
-		CGameObject::FilterCollision
-
-		CGameObject::GetBoundingBox
-		
-================================================================ */
 
 #include <windows.h>
 #include <d3d9.h>
@@ -87,22 +69,28 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_D:
-		if (!game->IsKeyDown(DIK_DOWN) && simon->jump==1)
+		if (simon->fight == false)
 		{
-			simon->SetState(SIMON_STATE_JUMP);
-			simon->jump = 0;
+			if (!game->IsKeyDown(DIK_DOWN) && simon->jump == true)
+			{
+				simon->SetState(SIMON_STATE_JUMP);
+				simon->jump = false;
+			}
 		}
 		break;
-	case DIK_DOWN:
-		float temp_x, temp_y;
-		simon->GetPosition(temp_x, temp_y);
-		simon->SetPosition(temp_x, temp_y + 9);
-		break;
 	case DIK_F:
-		simon->SetState(SIMON_STATE_FIGHT);
-		FrameStart = GetTickCount();
-		//flag = true;
+		now = GetTickCount();
+		if (now - FrameStart >= 300)
+		{
+			simon->fight = true;
+			if (game->IsKeyDown(DIK_LEFT) || game->IsKeyDown(DIK_RIGHT))
+				simon->SetState(SIMON_STATE_IDLE);
+			if (game->IsKeyDown(DIK_DOWN))
+				simon->SetState(SIMON_STATE_KNEE);
+			FrameStart = GetTickCount();
+		}
 		break;
+	
 	}
 }
 
@@ -112,9 +100,6 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
-		float temp_x, temp_y;		
-		simon->GetPosition(temp_x, temp_y);
-		simon->SetPosition(temp_x, temp_y - 9);
 		simon->SetState(SIMON_STATE_IDLE);
 		break;
 	}
@@ -122,63 +107,20 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
-	if (simon->GetState() == SIMON_STATE_FIGHT)
-	{
-		now = GetTickCount();
-		if (now - FrameStart >= 300)
-		{
-			if (game->IsKeyDown(DIK_DOWN))
-			{
-				simon->SetState(SIMON_STATE_KNEE);
-				/*if (simon->GetState() == SIMON_STATE_FIGHT)
-				{
-					now = GetTickCount();
-					if (now - FrameStart >= 300)
-						simon->SetState(simon->GetPreviousState());
-				}
-				else simon->SetState(simon->GetPreviousState());*/
-				if (game->IsKeyDown(DIK_LEFT)) simon->nx = -1;
-				else if (game->IsKeyDown(DIK_RIGHT))  simon->nx = 1;
-			}
-			else
-			{
-				if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-				else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-				/*else if (simon->GetState() == SIMON_STATE_FIGHT)
-				{
-					now = GetTickCount();
-					if (now - FrameStart >= 300)
-						simon->SetState(simon->GetPreviousState());
-				}*/
-				else simon->SetState(SIMON_STATE_IDLE);
-			}
-		}
-	}
-	else /*simon->SetState(simon->GetPreviousState());*/
+	if (simon->fight == false)
 	{
 		if (game->IsKeyDown(DIK_DOWN))
 		{
 			simon->SetState(SIMON_STATE_KNEE);
-			/*if (simon->GetState() == SIMON_STATE_FIGHT)
-			{
-				now = GetTickCount();
-				if (now - FrameStart >= 300)
-					simon->SetState(simon->GetPreviousState());
-			}
-			else simon->SetState(simon->GetPreviousState());*/
 			if (game->IsKeyDown(DIK_LEFT)) simon->nx = -1;
 			else if (game->IsKeyDown(DIK_RIGHT))  simon->nx = 1;
 		}
 		else
 		{
-			if (game->IsKeyDown(DIK_LEFT)) simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) simon->SetState(SIMON_STATE_WALKING_RIGHT);
-			/*else if (simon->GetState() == SIMON_STATE_FIGHT)
-			{
-				now = GetTickCount();
-				if (now - FrameStart >= 300)
-					simon->SetState(simon->GetPreviousState());
-			}*/
+			if (game->IsKeyDown(DIK_LEFT)) 
+				simon->SetState(SIMON_STATE_WALKING_LEFT);
+			else if (game->IsKeyDown(DIK_RIGHT)) 
+				simon->SetState(SIMON_STATE_WALKING_RIGHT);
 			else simon->SetState(SIMON_STATE_IDLE);
 		}
 	}
@@ -290,15 +232,20 @@ void LoadResources()
 	AddAnimation(in, sprites, ani, texcandle, 2);
 	in.close();
 	animations->Add(701, ani);
+	CItem* item;
+	item = new CItem(ITEM_STATE_HEART_SMALL);
+	item->SetPosition(85.0f, 130.0f);
+	objects.push_back(item);
 
 	CCandle *candle = new CCandle();
 	candle->AddAnimation(701);
-	candle->SetPosition(80.0f, 116.0f);
+	candle->SetPosition(80.0f, 113.0f);
 	candle->SetState(CANDLE_STATE_NORMAL);
 	objects.push_back(candle);
 
 
-	texture->Add(ID_MAP_LEVEL1, MAP_LEVEL1_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
+
+	/*texture->Add(ID_MAP_LEVEL1, MAP_LEVEL1_TEXTURE_PATH, D3DCOLOR_XRGB(255, 255, 255));
 	LPDIRECT3DTEXTURE9 texmap = texture->Get(ID_MAP_LEVEL1);
 	sprites->Add(20001, 0, 0, 768, 184, texmap);
 	ani = new CAnimation(100);
@@ -307,7 +254,8 @@ void LoadResources()
 
 	map1 = new CMap();
 	map1->AddAnimation(801);
-	map1->SetPosition(0.0f, 0.0f);
+	map1->SetPosition(0.0f, 0.0f);*/
+
 	//LPDIRECT3DTEXTURE9 texfishman = texture->Get(ID_FISHMAN);
 	//AddAnimation(in_fish, sprites, ani, texfishman, 1);//fire left
 	//animations->Add(601, ani);
@@ -397,7 +345,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		map1->Render();
+		//map1->Render();
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 

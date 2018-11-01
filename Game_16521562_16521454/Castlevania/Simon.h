@@ -17,7 +17,6 @@ using namespace std;
 #define SIMON_STATE_JUMP			30
 #define SIMON_STATE_KNEE			40
 #define SIMON_STATE_DIE				50
-#define SIMON_STATE_FIGHT			60
 
 #define SIMON_ANI_WALKING_LEFT		0
 #define SIMON_ANI_WALKING_RIGHT		1
@@ -46,8 +45,8 @@ class CSimon :public CGameObject
 	int previousstate;
 	CWhip *whip;
 public:
-	int jump = 1;
-	int fight = 0;
+	bool jump = true;
+	bool fight = false;
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);

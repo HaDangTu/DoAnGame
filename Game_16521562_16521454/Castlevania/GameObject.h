@@ -91,11 +91,7 @@ public:
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom) {};
 	void SetState(int state) {};
-	void SetXY(float x, float y)
-	{
-		this->x = x;
-		this->y = y;
-	};
+
 	Chiteffect() :CGameObject()
 	{
 		LoadAnimaion();

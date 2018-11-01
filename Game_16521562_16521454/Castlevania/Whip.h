@@ -22,8 +22,8 @@ class CWhip :
 	int currentFrame;
 	vector<LPANIMATION_FRAME> frames;
 	void LoadAnimaion();
-	bool fight;
 public:
+	bool fight;
 	CWhip();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();

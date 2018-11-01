@@ -7,20 +7,29 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	CGameObject::Update(dt);
 
 	vy += SIMON_GRAVITY;
-	
+	if (state != SIMON_STATE_KNEE && previousstate== SIMON_STATE_KNEE)
+	{
+		previousstate = NULL;
+		SetPosition(x, y - 9);
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEventsResult.clear();
 	if (state != SIMON_STATE_DIE)
 		CalcPotentialCollisions(coObject, coEvents);
 
-	if (state == SIMON_STATE_FIGHT)
+	if (fight == true)
 	{
 		if(nx<0)
 			whip->SetPosition(x - 22, y + 5);
 		else
 			whip->SetPosition(x + 22, y + 5);
 		whip->Update(dt, coObject);
+		if (whip->fight == true)
+		{
+			fight = false;
+			whip->fight = false;
+		}
 	}
 	if (coEvents.size() == 0)
 	{
@@ -45,7 +54,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) {
-			vy = 0; jump = 1;
+			vy = 0; jump = true;
 		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -55,6 +64,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				x += dx;
 				y += dy;
 			}
+			if (dynamic_cast<CItem *> (e->obj))
+			{
+				x += dx;
+				y += dy;
+
+			}
 		}
 	}
 }
@@ -62,58 +77,67 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 void CSimon::Render()
 {
 	int ani;
-	if (vx == 0)
+	if (fight == true)
 	{
-		if (nx > 0)
+		if (vx == 0)
 		{
-			ani = SIMON_ANI_IDLE_RIGHT;
-			if (mx > 0)
+			if (mx == 1)
 			{
-				ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
-				if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
+				if (nx > 0)
+					ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
+				else
+					ani = SIMON_ANI_KNEE_FIGHT_LEFT;
 			}
-			if (state == SIMON_STATE_FIGHT && mx == 0)
-				ani = SIMON_ANI_FIGHT_RIGHT;
-		}
-		else
-		{
-			ani = SIMON_ANI_IDLE_LEFT;
-			if (mx > 0)
+			else
 			{
-				ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
-				if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_KNEE_FIGHT_LEFT;
+				if (nx > 0)
+					ani = SIMON_ANI_FIGHT_RIGHT;
+				else
+					ani = SIMON_ANI_FIGHT_LEFT;
 			}
-			if (state == SIMON_STATE_FIGHT && mx == 0)
-				ani = SIMON_ANI_FIGHT_LEFT;
 		}
 	}
 	else
 	{
-		if (nx < 0)
+		if (vx == 0)
 		{
-			ani = SIMON_ANI_WALKING_LEFT;
-			if (state == SIMON_STATE_FIGHT) ani =SIMON_ANI_FIGHT_LEFT;
+			if (mx == 1)
+			{
+				if (nx > 0)
+					ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+				else
+					ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+			}
+			else
+			{
+				if (nx > 0)
+					ani = SIMON_ANI_IDLE_RIGHT;
+				else
+					ani = SIMON_ANI_IDLE_LEFT;
+			}
 		}
-		else
+		else 
 		{
-			ani = SIMON_ANI_WALKING_RIGHT;
-			if (state == SIMON_STATE_FIGHT) ani = SIMON_ANI_FIGHT_RIGHT;
+			if (nx > 0)
+				ani = SIMON_ANI_WALKING_RIGHT;
+			else 
+				ani = SIMON_ANI_WALKING_LEFT;
 		}
+		if (vy < 0 && nx < 0)
+			ani = SIMON_ANI_JUMP_LEFT;
+		else if (vy < 0 && nx > 0)
+			ani = SIMON_ANI_JUMP_RIGHT;
 	}
 
 
-	if (vy < 0 && nx < 0)
-		ani = SIMON_ANI_JUMP_LEFT;
-	else if (vy < 0 && nx > 0)
-		ani = SIMON_ANI_JUMP_RIGHT;
+
 	whip->Render(ani);
 	animations[ani]->Render(x, y, 255);
-	//RenderBoundingBox(200);
+	RenderBoundingBox(200);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-
 	left = x;
 	top = y;
 	if (vx == 0 && mx == 1)
@@ -132,10 +156,6 @@ void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bo
 
 int CSimon::GetPreviousState()
 {
-	if (state == SIMON_STATE_IDLE || state == SIMON_STATE_WALKING_LEFT ||
-		state == SIMON_STATE_WALKING_RIGHT || state == SIMON_STATE_KNEE)
-		previousstate = state;
-	DebugOut(L"previous state = %d\n", previousstate);
 	return previousstate;
 }
 
@@ -156,17 +176,17 @@ void CSimon::SetState(int state)
 		break;
 	case SIMON_STATE_JUMP:
 		vy = -SIMON_JUMP_SPEED;
-		//break;
+		break;
 	case SIMON_STATE_IDLE:
 		vx = 0;
 		mx = 0;
 		break;
 	case SIMON_STATE_KNEE:
+		if(previousstate!= SIMON_STATE_KNEE)
+			SetPosition(x, y + 9);
+		previousstate = SIMON_STATE_KNEE;
 		vx = 0;
 		mx = 1;
-		break;
-	case SIMON_STATE_FIGHT:
-		vx = 0;		
 		break;
 	}
 }

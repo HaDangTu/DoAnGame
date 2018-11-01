@@ -4,7 +4,7 @@
 #include <vector>
 #include "Simon.h"
 #define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
-#define ID_WHIP		6
+#define ID_WHIP	6
 using namespace std;
 
 
@@ -41,13 +41,8 @@ void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		coEventsResult.clear();
 		CalcPotentialCollisions(coObjects, coEvents);
-		if (coEvents.size() == 0)
-		{
-			x += dx;
-			y += dy;
-		}
-		else
-		{
+		
+
 			for (UINT i = 0; i < coEvents.size(); i++)
 			{
 				LPCOLLISIONEVENT c = coEvents[i];
@@ -60,11 +55,13 @@ void CWhip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<CCandle *> (e->obj))
 				{
 					CCandle *candle = dynamic_cast<CCandle *>(e->obj);
-					candle->SetState(CANDLE_STATE_DISAPPEAR);
+				
+					if (candle->state != CANDLE_STATE_DELETE)
+					{
+						candle->SetState(CANDLE_STATE_DISAPPEAR);
+					}
 				}
 			}
-		}
-		fight = false;
 	}
 }
 void CWhip::Render()

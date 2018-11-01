@@ -147,7 +147,7 @@ CGameObject::~CGameObject()
 
 void Chiteffect::Render()
 {
-	//animations[0]->Render(x, y, 255);
+	animations[0]->Render(x, y, 255);
 	animations[1]->Render(x + 5, y + 5, 255);
 }
 void Chiteffect::LoadAnimaion()
@@ -161,7 +161,7 @@ void Chiteffect::LoadAnimaion()
 	ifstream in("Data\\Hit_effect.txt");
 	LPANIMATION ani;
 	LPDIRECT3DTEXTURE9 texhiteffect = texture->Get(ID_HITEFFECT);
-	ani = new CAnimation(100);
+	ani = new CAnimation(50);
 	CInputImage::AddAnimation(in, sprites, ani, texhiteffect, 1);
 	animations->Add(5000, ani);
 	CInputImage::AddAnimation(in, sprites, ani, texhiteffect, 3);

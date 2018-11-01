@@ -11,14 +11,14 @@ void CCandle::Render()
 	else if (state == CANDLE_STATE_DISAPPEAR)
 	{
 		int now = GetTickCount();
-		Chiteffect *hiteffect = new Chiteffect();
-		hiteffect->SetXY(x, y);
+		hiteffect->SetPosition(x, y);
 		hiteffect->Render();
 		if (now - time >= FrameTime)
 			SetState(CANDLE_STATE_DELETE);
 	}
 	else
 	{
+
 	}
 }
 

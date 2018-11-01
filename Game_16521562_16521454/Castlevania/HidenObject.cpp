@@ -2,6 +2,7 @@
 
 void CHidenObject::Render()
 {
+	RenderBoundingBox(100);
 	//animations[0]->Render(x, y);
 }
 
