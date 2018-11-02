@@ -131,7 +131,9 @@
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Candle.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="EntranceLevel.h" />
     <ClInclude Include="Fishman.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -150,7 +152,9 @@
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Candle.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="EntranceLevel.cpp" />
     <ClCompile Include="Fishman.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />

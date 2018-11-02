@@ -5,17 +5,52 @@ CMap::CMap()
 	
 }
 
+CMap::CMap(float width, float height)
+{
+	this->width = width;
+	this->height = height;
+}
+
 
 CMap::~CMap()
 {
 }
 
-void CMap::Render()
+vector<LPGAMEOBJECT> CMap::GetUpdateObjects()
 {
-	animations[0]->Render(x, y);
+	float cam_x, cam_y;
+	CGame *game = CGame::GetInstance();
+	game->GetCamera(cam_x, cam_y);
+	vector<LPGAMEOBJECT> UpdateObjects;
+
+	cells->GetListOfObjects(&UpdateObjects, cam_x, cam_y);
+	return UpdateObjects;
 }
 
-void CMap::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+void CMap::LoadMap()
 {
-	//CGameObject::GetBoundingBox(left,top,right, bottom);
+	int column, row;
+	column = (int)width / 80 + 1;
+	row = (int)height / 60 + 1;
+
+	cells = new CCells(row, column);
+
+	textures = CTextures::GetInstance();
+	sprites = CSprites::GetInstance();
+	animations = CAnimations::GetInstance();
 }
+
+//void CMap::Update(DWORD dt)
+//{
+//	float cam_x;
+//	float cam_y;
+//	CGame *game = CGame::GetInstance();
+//	game->GetCamera(cam_x, cam_y);
+//	
+//	cells->Update(dt, cam_x, cam_y);
+//}
+
+void CMap::Render()
+{
+}
+

@@ -36,14 +36,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	{
 		x += dx;
 		y += dy;
-		CGame *game = CGame::GetInstance();
-		float cx, cy;		
-		game->GetCamera(cx, cy);
-		if (x > 160.0f)
-			game->SetCamera(x - 150.0f, 0.0f);
-		if (cx <= 0)
-			game->SetCamera(0.0f, 0.0f);
-		
 	}
 	else
 	{
@@ -80,6 +72,23 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				y += dy;
 				item->SetState(ITEM_STATE_DELETE);
 			}
+		}
+	}
+	CGame *game = CGame::GetInstance();
+	float cx, cy;
+	game->GetCamera(cx, cy);
+	if (x > 150.0f)
+	{
+		game->SetCamera(x - 150.0f, 0.0f);
+		//if (cx < 0)
+		//	game->SetCamera(0.0f, 0.0f);
+		//if (cx + 320.0f >= 768.0f)
+		//	game->SetCamera(cx, 0.0f);
+		if (cx < 0) game->SetCamera(0.0f, 0.0f);
+		if (cx + 320.0f >= 768.0f)
+		{
+			game->SetCamera(cx, 0.0f);
+			if (x < 620.0f) game->SetCamera(x - 150.0f, 0.0f);
 		}
 	}
 }

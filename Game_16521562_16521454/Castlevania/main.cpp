@@ -18,6 +18,7 @@
 #include "Candle.h"
 #include "Map.h"
 #include "HidenObject.h"
+#include "EntranceLevel.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -41,7 +42,6 @@ using namespace std;
 #define ID_BAT      4
 #define ID_CANDLE	5
 #define ID_MAP_LEVEL1		6
-
 CGame *game;
 CSimon *simon;
 CBrick *brick;
@@ -53,7 +53,7 @@ vector<LPGAMEOBJECT> objects;
 DWORD now;
 DWORD FrameStart;
 CHidenObject *hidenObject;
-
+CEntranceLevel *level_1;
 class CSampleKeyHander: public CKeyEventHandler
 {
 	virtual void KeyState(BYTE *states);
@@ -205,7 +205,7 @@ void LoadResources()
 	simon->AddAnimation(502);
 	simon->SetPosition(10.0f, 80.0f);
 	//simon->SetState(SIMON_STATE_IDLE);
-	objects.push_back(simon);
+	
 
 	/*LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
 	
@@ -222,7 +222,7 @@ void LoadResources()
 		objects.push_back(brick);
 	}*/
 
-	hidenObject = new CHidenObject();
+	/*hidenObject = new CHidenObject();
 	hidenObject->SetPosition(0.0f, 146.0f);
 	hidenObject->SetSize(769.0f, 15.0f);
 	objects.push_back(hidenObject);
@@ -238,7 +238,7 @@ void LoadResources()
 	candle->AddAnimation(701);
 	candle->SetPosition(80.0f, 113.0f);
 	candle->SetState(CANDLE_STATE_NORMAL);
-	objects.push_back(candle);
+	objects.push_back(candle);*/
 
 
 
@@ -277,6 +277,12 @@ void LoadResources()
 	//fishman->SetPosition(100.f, 170.f);
 	//fishman->SetState(FISHMAN_STATE_JUMP);
 	//objects.push_back(fishman);
+
+	level_1 = new CEntranceLevel(768.0f, 184.0f);
+	level_1->SetSence(SCENE_1);
+	level_1->LoadMap();
+	objects = level_1->GetUpdateObjects();
+	objects.push_back(simon);
 }
 
 void AddAnimation(ifstream &in, CSprites * sprites, 
@@ -314,15 +320,14 @@ void Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	vector<LPGAMEOBJECT> coObjects;
-	for (int i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
+	objects.clear();
+	objects = level_1->GetUpdateObjects();
+	objects.push_back(simon);
 
+	for (int i = 0; i < objects.size() - 1; i++)
+		coObjects.push_back(objects[i]);
 	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt,&coObjects);
-	}
+		objects[i]->Update(dt, &coObjects);
 	
 }
 
@@ -342,7 +347,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		//map1->Render();
+		level_1->Render();
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 
