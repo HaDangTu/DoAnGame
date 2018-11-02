@@ -6,8 +6,9 @@
 #define HEART_BIG_BBOX_WIDTH 12
 #define HEART_BIG_BBOX_HEIGHT 9
 
-#define ITEM_STATE_HEART_SMALL 0
-#define ITEM_STATE_HEART_BIG 1
+#define ITEM_STATE_DELETE 0
+#define ITEM_STATE_HEART_SMALL 1
+#define ITEM_STATE_HEART_BIG 2
 
 #define ID_HEART_SMALL 11
 #define ID_HEART_BIG 12
@@ -15,6 +16,7 @@
 class CItem : public CGameObject
 {
 public:
+	int tao = false;
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();

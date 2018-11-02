@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "Candle.h"
 #include "Game.h"
+#include "HidenObject.h"
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	CGameObject::Update(dt);
@@ -38,7 +39,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		CGame *game = CGame::GetInstance();
 		float cx, cy;		
 		game->GetCamera(cx, cy);
-		DebugOut(L"x = %f, cx = %f\n", x, cx);
 		if (x > 160.0f)
 			game->SetCamera(x - 150.0f, 0.0f);
 		if (cx <= 0)
@@ -47,28 +47,38 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	}
 	else
 	{
+		DebugOut(L"size = %f\n", coObject->size());
+
 		float min_tx, min_ty, nx = 0, ny;
+		
+		for (UINT i = 0; i < coEvents.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEvents[i];
+			if (dynamic_cast<CCandle *> (e->obj))
+				coEvents.erase(coEvents.begin() + i);
+		}
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) {
-			vy = 0; jump = true;
-		}
+		
+		
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CCandle *> (e->obj))
+			if (dynamic_cast<CHidenObject *> (e->obj))
 			{
-				x += dx;
-				y += dy;
+				if (nx != 0) vx = 0;
+				if (ny != 0) {
+					vy = 0; jump = true;
+				}
 			}
-			if (dynamic_cast<CItem *> (e->obj))
+			else if (dynamic_cast<CItem *> (e->obj))
 			{
+				CItem *item = dynamic_cast<CItem *>(e->obj);
+				if(item->state== ITEM_STATE_HEART_SMALL) heart++;
 				x += dx;
 				y += dy;
-
+				item->SetState(ITEM_STATE_DELETE);
 			}
 		}
 	}

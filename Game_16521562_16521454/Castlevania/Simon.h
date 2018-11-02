@@ -41,6 +41,7 @@ using namespace std;
 #define SIMON_BBOX_KNEE_FIGHT_HEIGHT	25
 class CSimon :public CGameObject
 {
+	int heart=0;
 	int mx;
 	int previousstate;
 	CWhip *whip;

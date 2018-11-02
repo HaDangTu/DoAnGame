@@ -232,10 +232,7 @@ void LoadResources()
 	AddAnimation(in, sprites, ani, texcandle, 2);
 	in.close();
 	animations->Add(701, ani);
-	CItem* item;
-	item = new CItem(ITEM_STATE_HEART_SMALL);
-	item->SetPosition(85.0f, 130.0f);
-	objects.push_back(item);
+
 
 	CCandle *candle = new CCandle();
 	candle->AddAnimation(701);

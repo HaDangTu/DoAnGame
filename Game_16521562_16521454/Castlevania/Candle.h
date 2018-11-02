@@ -14,6 +14,7 @@ class CCandle :
 	public CGameObject
 {
 	Chiteffect *hiteffect;
+	CItem* item;
 	int time;
 public:
 	void Render();
@@ -22,7 +23,7 @@ public:
 	CCandle()
 	{
 		hiteffect = new Chiteffect();
-
+		item = new CItem(ITEM_STATE_HEART_SMALL);
 	}
 };
 

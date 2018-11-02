@@ -12,13 +12,20 @@ void CCandle::Render()
 	{
 		int now = GetTickCount();
 		hiteffect->SetPosition(x, y);
+		item->SetPosition(x, y);
 		hiteffect->Render();
 		if (now - time >= FrameTime)
 			SetState(CANDLE_STATE_DELETE);
 	}
 	else
 	{
-
+		if (item->tao == false)
+		{
+			vector<LPGAMEOBJECT> objects;
+			objects.push_back(item);
+			item->tao = true;
+		}
+		item->Render();	
 	}
 }
 

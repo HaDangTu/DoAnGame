@@ -19,26 +19,21 @@ void CItem::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 
 void CItem::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	
 }
+
 
 void CItem::Render()
 {
 	if (state == ITEM_STATE_HEART_SMALL)
 	{
-		animations[0]->Render(x,y,255);
+		animations[0]->Render(x, y, 255);
 	}
 }
 
 void CItem::SetState(int state)
 {
 	CGameObject::SetState(state);
-	switch (state)
-	{
-	case ITEM_STATE_HEART_SMALL:
-		break;
-	case ITEM_STATE_HEART_BIG:
-			break;
-	}
 }
 void CItem::loaddata(int state)
 {
@@ -62,6 +57,7 @@ void CItem::loaddata(int state)
 }
 CItem::CItem(int state)
 {
+	SetState(state);
 	loaddata(state);
 }
 CItem::~CItem()
