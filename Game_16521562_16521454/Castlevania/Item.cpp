@@ -1,6 +1,6 @@
 #include "Item.h"
 #include "InputImage.h"
-
+#include "HidenObject.h"
 void CItem::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
@@ -19,7 +19,32 @@ void CItem::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 
 void CItem::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	
+	CGameObject::Update(dt);
+	vy += ITEM_GRAVITY;
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEventsResult.clear();
+	CalcPotentialCollisions(coObjects, coEvents);
+	if (coEvents.size() == 0)
+	{
+		y += dy;
+	}
+	else
+	{
+
+		float min_tx, min_ty, nx = 0, ny;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CHidenObject *> (e->obj))
+			{
+				if (ny != 0) {
+					vy = 0;
+				}
+			}
+		}
+	}
 }
 
 

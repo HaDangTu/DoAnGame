@@ -39,7 +39,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	}
 	else
 	{
-		DebugOut(L"size = %f\n", coObject->size());
 
 		float min_tx, min_ty, nx = 0, ny;
 		

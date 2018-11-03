@@ -20,6 +20,7 @@ public:
 	void Render();
 	void GetBoundingBox(float & left, float & top, float &right, float & bottom);
 	void SetState(int state);
+	CItem* GetItem() { return item; };
 	CCandle()
 	{
 		hiteffect = new Chiteffect();

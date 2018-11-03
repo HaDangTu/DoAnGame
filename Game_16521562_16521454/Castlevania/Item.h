@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#define ITEM_GRAVITY  0.01f
 
 #define HEART_SMALL_BBOX_WIDTH 8
 #define HEART_SMALL_BBOX_HEIGHT 9
