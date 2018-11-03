@@ -3,18 +3,25 @@
 #include <vector>
 using namespace std;
 
-#define SHORT_WHIP	1
-#define LONG_WHIP	2
+#define WHITE_WHIP	0
+#define BLUE_WHIP	1
+#define YELLOW_WHIP 2
+#define RED_WHIP 3
 
 #define WHIP_ANI_LEFT		0
 #define WHIP_ANI_RIGHT		1
 
-#define SHORT_WHIP_BBOX_WIDTH	28
-#define SHORT_WHIP_BBOX_HEIGHT	10
+#define WHITE_WHIP_BBOX_WIDTH	22
+#define WHITE_WHIP_BBOX_HEIGHT	8
 
-#define LONG_WHIP_BBOX_WIDTH	44
-#define LONG_WHIP_BBOX_HEIGHT	10
+#define BLUE_WHIP_BBOX_WIDTH	24
+#define BLUE_WHIP_BBOX_HEIGHT	8
 
+#define YELLOW_WHIP_BBOX_WIDTH	24
+#define YELLOW_WHIP_BBOX_HEIGHT	8
+
+#define RED_WHIP_BBOX_WIDTH	   24
+#define RED_WHIP_BBOX_HEIGHT	8
 class CWhip :
 	public CGameObject
 {
@@ -29,5 +36,6 @@ public:
 	void Render();
 	void Render(int ani);
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
+	void SetState(int state);
 };
 

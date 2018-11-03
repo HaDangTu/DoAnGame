@@ -15,6 +15,11 @@ void CItem::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 		right = x + HEART_BIG_BBOX_WIDTH;
 		bottom = y + HEART_BIG_BBOX_HEIGHT;
 	}
+	else if(state ==ITEM_STATE_WHIP_UPDATE)
+	{
+		right = x + WHIP_UPDATE_BBOX_WIDTH;
+		bottom = y + WHIP_UPDATE_BBOX_HEIGHT;
+	}
 }
 
 void CItem::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -54,36 +59,44 @@ void CItem::Render()
 	{
 		animations[0]->Render(x, y, 255);
 	}
+	else if (state == ITEM_STATE_HEART_BIG)
+	{
+		animations[1]->Render(x, y, 255);
+	}
+	else if (state == ITEM_STATE_WHIP_UPDATE)
+	{
+		animations[2]->Render(x, y, 255);
+	}
 }
 
 void CItem::SetState(int state)
 {
 	CGameObject::SetState(state);
 }
-void CItem::loaddata(int state)
+void CItem::loaddata()
 {
-	if (state == ITEM_STATE_HEART_SMALL)
-	{
-		CTextures *texture = CTextures::GetInstance();
-		texture->Add(ID_HEART_SMALL, ITEM_TEXTURE_PATH, D3DCOLOR_XRGB(128, 0, 0));
-
-		CSprites *sprites = CSprites::GetInstance();
-		CAnimations *animations = CAnimations::GetInstance();
-
-		ifstream in("Data\\Item.txt");
-		LPANIMATION ani;
-		LPDIRECT3DTEXTURE9 texitem = texture->Get(ID_HEART_SMALL);
-		ani = new CAnimation(100);
-		CInputImage::AddAnimation(in, sprites, ani, texitem, 1);
-		animations->Add(6000, ani);
-		in.close();
-		AddAnimation(6000);
-	}
+	LPANIMATION ani;
+	CTextures *texture = CTextures::GetInstance();
+	CSprites *sprites = CSprites::GetInstance();
+	CAnimations *animations = CAnimations::GetInstance();
+	ifstream in("Data\\Item.txt");
+	LPDIRECT3DTEXTURE9 texitem = texture->Get(ID_ITEM);
+	ani = new CAnimation(100);
+	CInputImage::AddAnimation(in, sprites, ani, texitem, 1); // heart small
+	animations->Add(6000, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texitem, 1); //heart big
+	animations->Add(6001, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texitem, 1); //whip update
+	animations->Add(6002, ani);
+	in.close();
+	AddAnimation(6000);
+	AddAnimation(6001);
+	AddAnimation(6002);
 }
 CItem::CItem(int state)
 {
 	SetState(state);
-	loaddata(state);
+	loaddata();
 }
 CItem::~CItem()
 {

@@ -58,8 +58,15 @@ public:
 		mx = 0;
 		previousstate = state;
 		whip = new CWhip();
+		whip->SetState(WHITE_WHIP);
 		whip->AddAnimation(2000);
 		whip->AddAnimation(2001);
+		whip->AddAnimation(2002);
+		whip->AddAnimation(2003);
+		whip->AddAnimation(2004);
+		whip->AddAnimation(2005);
+		whip->AddAnimation(2006);
+		whip->AddAnimation(2007);
 	}
 
 };

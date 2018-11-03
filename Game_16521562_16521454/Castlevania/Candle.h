@@ -21,10 +21,10 @@ public:
 	void GetBoundingBox(float & left, float & top, float &right, float & bottom);
 	void SetState(int state);
 	CItem* GetItem() { return item; };
-	CCandle()
+	CCandle(int ani)
 	{
 		hiteffect = new Chiteffect();
-		item = new CItem(ITEM_STATE_HEART_SMALL);
+		item = new CItem(ani);
 	}
 };
 

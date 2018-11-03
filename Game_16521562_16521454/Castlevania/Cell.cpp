@@ -78,7 +78,8 @@ void CCells::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, float cam_x, fl
 						if (e->state == CANDLE_STATE_DELETE)
 						{
 							CCandle *candle = dynamic_cast<CCandle *>(e);
-							list_object->push_back(candle->GetItem());
+							if(candle->GetItem()->GetState()!=ITEM_STATE_DELETE)
+								list_object->push_back(candle->GetItem());
 						}
 						else
 						{

@@ -159,6 +159,7 @@ void LoadResources()
 	texture->Add(ID_BRICK, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(237, 28, 36));
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
+	texture->Add(ID_ITEM, ITEM_TEXTURE_PATH, D3DCOLOR_XRGB(128, 0, 0));
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
@@ -166,10 +167,11 @@ void LoadResources()
 	
 	LPDIRECT3DTEXTURE9 texsimon = texture->Get(ID_SIMON);
 	LPANIMATION ani;
-	ifstream in("Data\\Simon.txt");
-	
 	
 
+	
+
+	ifstream in("Data\\Simon.txt");
 	AddAnimation(in, sprites, ani, texsimon, 3);//walk left
 	animations->Add(101, ani);
 	AddAnimation(in, sprites, ani, texsimon, 3);//walk right

@@ -21,10 +21,20 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 	if (fight == true)
 	{
-		if(nx<0)
-			whip->SetPosition(x - 22, y + 5);
+		if (nx < 0)
+		{
+			if (whip->state == WHITE_WHIP || whip->state == BLUE_WHIP)
+				whip->SetPosition(x - 22, y + 5);
+			else if (whip->state ==YELLOW_WHIP || whip->state == RED_WHIP)
+				whip->SetPosition(x - 22, y + 5);
+		}
 		else
-			whip->SetPosition(x + 22, y + 5);
+		{
+			if (whip->state == WHITE_WHIP || whip->state == BLUE_WHIP)
+				whip->SetPosition(x + 22, y + 5);
+			else if (whip->state == YELLOW_WHIP || whip->state == RED_WHIP)
+				whip->SetPosition(x + 22, y + 5);
+		}
 		whip->Update(dt, coObject);
 		if (whip->fight == true)
 		{
@@ -67,12 +77,23 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			{
 				CItem *item = dynamic_cast<CItem *>(e->obj);
 				if(item->state== ITEM_STATE_HEART_SMALL) heart++;
+				if (item->state == ITEM_STATE_HEART_BIG) heart+=2;
+				if (item->state == ITEM_STATE_WHIP_UPDATE)
+				{
+					if(whip->state==WHITE_WHIP)
+						whip->SetState(BLUE_WHIP);
+					else if(whip->state == BLUE_WHIP)
+						whip->SetState(YELLOW_WHIP);
+					else if (whip->state == YELLOW_WHIP)
+						whip->SetState(RED_WHIP);
+				}
 				x += dx;
 				y += dy;
 				item->SetState(ITEM_STATE_DELETE);
 			}
 		}
 	}
+	DebugOut(L"heart = %d\n", heart);
 	CGame *game = CGame::GetInstance();
 	float cx, cy;
 	game->GetCamera(cx, cy);
@@ -151,7 +172,6 @@ void CSimon::Render()
 
 	whip->Render(ani);
 	animations[ani]->Render(x, y, 255);
-	RenderBoundingBox(200);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)

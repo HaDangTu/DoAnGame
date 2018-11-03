@@ -24,6 +24,18 @@ void CWhip::LoadAnimaion()
 	animations->Add(2000, ani);
 	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
 	animations->Add(2001, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2002, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2003, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2004, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2005, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2006, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texwhip, 3);
+	animations->Add(2007, ani);
 	in.close();
 }
 
@@ -70,15 +82,57 @@ void CWhip::Render()
 }
 void CWhip::Render(int ani)
 {
-	if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+	if (state == WHITE_WHIP)
 	{
-		//RenderBoundingBox(200);
-		animations[0]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
+		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+		{
+			//RenderBoundingBox(200);
+			animations[0]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
+		}
+		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+		{
+			//RenderBoundingBox(200);
+			animations[1]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
+		}
 	}
-	else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+	else if (state == BLUE_WHIP)
 	{
-		//RenderBoundingBox(200);
-		animations[1]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
+		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+		{
+			RenderBoundingBox(200);
+			animations[2]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
+		}
+		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+		{
+			RenderBoundingBox(200);
+			animations[3]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
+		}
+	}
+	else if (state == YELLOW_WHIP)
+	{
+		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+		{
+			RenderBoundingBox(200);
+			animations[4]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
+		}
+		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+		{
+			RenderBoundingBox(200);
+			animations[5]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
+		}
+	}
+	else if (state == RED_WHIP)
+	{
+		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
+		{
+			RenderBoundingBox(200);
+			animations[6]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
+		}
+		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
+		{
+			RenderBoundingBox(200);
+			animations[7]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
+		}
 	}
 }
 
@@ -86,15 +140,30 @@ void CWhip::GetBoundingBox(float & left, float & top, float & right, float & bot
 {
 	left = x;
 	top = y;
-	if (state == SHORT_WHIP)
+	if (state == WHITE_WHIP)
 	{
-		right = x + SHORT_WHIP_BBOX_WIDTH;
-		bottom = y + SHORT_WHIP_BBOX_HEIGHT;
+		right = x + WHITE_WHIP_BBOX_WIDTH;
+		bottom = y + WHITE_WHIP_BBOX_HEIGHT;
 	}
-	else
+	else if(state==BLUE_WHIP)
 	{
-		right = x + LONG_WHIP_BBOX_WIDTH;
-		bottom = y + LONG_WHIP_BBOX_HEIGHT;
+		right = x + BLUE_WHIP_BBOX_WIDTH;
+		bottom = y + BLUE_WHIP_BBOX_HEIGHT;
 	}
+	else if (state == YELLOW_WHIP)
+	{
+		right = x + YELLOW_WHIP_BBOX_WIDTH;
+		bottom = y + YELLOW_WHIP_BBOX_HEIGHT;
+	}
+	else if (state == RED_WHIP)
+	{
+		right = x + RED_WHIP_BBOX_WIDTH;
+		bottom = y + RED_WHIP_BBOX_HEIGHT;
+	}
+}
+
+void CWhip::SetState(int state)
+{
+	CGameObject::SetState(state);
 }
 

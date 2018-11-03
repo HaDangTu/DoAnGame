@@ -18,31 +18,31 @@ void CEntranceLevel::LoadMap()
 		CInputImage::AddAnimation(in, sprites, ani, texture_candle, 2);
 		animations->Add(100, ani);
 
-		CCandle *candle = new CCandle();
+		CCandle *candle = new CCandle(ITEM_STATE_WHIP_UPDATE);
 		candle->AddAnimation(100);
 		candle->SetPosition(85.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
 		cells->InitCells(candle, 2, 1);
 
-		candle = new CCandle();
+		candle = new CCandle(ITEM_STATE_HEART_SMALL);
 		candle->AddAnimation(100);
 		candle->SetPosition(222.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
 		cells->InitCells(candle, 2, 2);
 
-		candle = new CCandle();
+		candle = new CCandle(ITEM_STATE_HEART_SMALL);
 		candle->AddAnimation(100);
 		candle->SetPosition(343.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
 		cells->InitCells(candle, 2, 4);
 		
-		candle = new CCandle();
+		candle = new CCandle(ITEM_STATE_WHIP_UPDATE);
 		candle->AddAnimation(100);
 		candle->SetPosition(475.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
 		cells->InitCells(candle, 2, 6);
 
-		candle = new CCandle();
+		candle = new CCandle(ITEM_STATE_HEART_SMALL);
 		candle->AddAnimation(100);
 		candle->SetPosition(600.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
