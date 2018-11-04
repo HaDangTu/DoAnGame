@@ -20,10 +20,10 @@ CSprites *CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprite::Draw(float x, float y, int alpha)
+void CSprite::Draw(float x, float y, int alpha,int alpha_x,int alpha_y,int alpha_z)
 {
 	CGame * game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom, alpha);
+	game->Draw(x, y, texture, left, top, right, bottom, alpha, alpha_x, alpha_y, alpha_z);
 }
 
 void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
@@ -71,6 +71,14 @@ void CAnimation::Render(float x, float y, int alpha)
 	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 }
 
+void CAnimation::Render_now(float x, float y, int alpha,int alpha_x, int alpha_y, int alpha_z)
+{
+	if (currentFrame == -1)
+	{
+		currentFrame = 0;
+	}
+	frames[currentFrame]->GetSprite()->Draw(x, y, alpha,alpha_x,alpha_y,alpha_z);
+}
 void CAnimation::RenderWhip(bool& fight, float x, float y, float x1, float y1, float x2, float y2, int alpha)
 {
 	DWORD now = GetTickCount();

@@ -18,7 +18,7 @@ class CSprite
 public: 
 	CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 
-	void Draw(float x, float y, int alpha = 255);
+	void Draw(float x, float y, int alpha = 255, int alpha_x = 255, int alpha_y = 255, int alpha_z = 255);
 };
 
 typedef CSprite * LPSPRITE;
@@ -65,6 +65,7 @@ public:
 	CAnimation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
 	void Render(float x, float y, int alpha=255);
+	void Render_now(float x, float y, int alpha=255,int alpha_x=255,int alpha_y=255,int alpha_z=255);
 	void RenderWhip(bool& fight, float x, float y, float x1, float y1, float x2, float y2, int alpha = 255);
 };
 

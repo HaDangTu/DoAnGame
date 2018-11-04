@@ -22,19 +22,9 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	if (fight == true)
 	{
 		if (nx < 0)
-		{
-			if (whip->state == WHITE_WHIP || whip->state == BLUE_WHIP)
-				whip->SetPosition(x - 22, y + 5);
-			else if (whip->state ==YELLOW_WHIP || whip->state == RED_WHIP)
-				whip->SetPosition(x - 22, y + 5);
-		}
+			whip->SetPosition(x - 22, y + 5);
 		else
-		{
-			if (whip->state == WHITE_WHIP || whip->state == BLUE_WHIP)
-				whip->SetPosition(x + 22, y + 5);
-			else if (whip->state == YELLOW_WHIP || whip->state == RED_WHIP)
-				whip->SetPosition(x + 22, y + 5);
-		}
+			whip->SetPosition(x + 22, y + 5);
 		whip->Update(dt, coObject);
 		if (whip->fight == true)
 		{
@@ -80,12 +70,15 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				if (item->state == ITEM_STATE_HEART_BIG) heart+=2;
 				if (item->state == ITEM_STATE_WHIP_UPDATE)
 				{
+					state_update = state;
 					if(whip->state==WHITE_WHIP)
 						whip->SetState(BLUE_WHIP);
 					else if(whip->state == BLUE_WHIP)
 						whip->SetState(YELLOW_WHIP);
 					else if (whip->state == YELLOW_WHIP)
 						whip->SetState(RED_WHIP);
+					SetState(SIMON_STATE_UPDATE);
+					FrameUpdate = GetTickCount();
 				}
 				x += dx;
 				y += dy;
@@ -116,62 +109,79 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 void CSimon::Render()
 {
 	int ani;
-	if (fight == true)
+	if (state == SIMON_STATE_UPDATE)
 	{
-		if (vx == 0)
+		if (state_update == SIMON_STATE_WALKING_LEFT)
+			ani = SIMON_ANI_WALKING_LEFT;
+		else
+			ani = SIMON_ANI_WALKING_RIGHT;
+		if (alpha == 255)
 		{
-			if (mx == 1)
-			{
-				if (nx > 0)
-					ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
-				else
-					ani = SIMON_ANI_KNEE_FIGHT_LEFT;
-			}
-			else
-			{
-				if (nx > 0)
-					ani = SIMON_ANI_FIGHT_RIGHT;
-				else
-					ani = SIMON_ANI_FIGHT_LEFT;
-			}
+			animations[ani]->Render_now(x, y, 255, alpha, 28,36);
+			alpha = 237;
+		}
+		else
+		{
+			animations[ani]->Render_now(x, y);
+			alpha = 255;
 		}
 	}
 	else
 	{
-		if (vx == 0)
+		if (fight == true)
 		{
-			if (mx == 1)
+			if (vx == 0)
 			{
-				if (nx > 0)
-					ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+				if (mx == 1)
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
+					else
+						ani = SIMON_ANI_KNEE_FIGHT_LEFT;
+				}
 				else
-					ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_FIGHT_RIGHT;
+					else
+						ani = SIMON_ANI_FIGHT_LEFT;
+				}
+			}
+		}
+		else
+		{
+			if (vx == 0)
+			{
+				if (mx == 1)
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+					else
+						ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+				}
+				else
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_IDLE_RIGHT;
+					else
+						ani = SIMON_ANI_IDLE_LEFT;
+				}
 			}
 			else
 			{
 				if (nx > 0)
-					ani = SIMON_ANI_IDLE_RIGHT;
+					ani = SIMON_ANI_WALKING_RIGHT;
 				else
-					ani = SIMON_ANI_IDLE_LEFT;
+					ani = SIMON_ANI_WALKING_LEFT;
 			}
+			if (vy < 0 && nx < 0)
+				ani = SIMON_ANI_JUMP_LEFT;
+			else if (vy < 0 && nx > 0)
+				ani = SIMON_ANI_JUMP_RIGHT;
 		}
-		else 
-		{
-			if (nx > 0)
-				ani = SIMON_ANI_WALKING_RIGHT;
-			else 
-				ani = SIMON_ANI_WALKING_LEFT;
-		}
-		if (vy < 0 && nx < 0)
-			ani = SIMON_ANI_JUMP_LEFT;
-		else if (vy < 0 && nx > 0)
-			ani = SIMON_ANI_JUMP_RIGHT;
+		whip->Render(ani);
+		animations[ani]->Render(x, y, 255);
 	}
-
-
-
-	whip->Render(ani);
-	animations[ani]->Render(x, y, 255);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -225,6 +235,9 @@ void CSimon::SetState(int state)
 		previousstate = SIMON_STATE_KNEE;
 		vx = 0;
 		mx = 1;
+		break;
+	case SIMON_STATE_UPDATE:
+		vx = 0;
 		break;
 	}
 }

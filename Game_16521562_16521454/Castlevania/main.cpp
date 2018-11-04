@@ -48,9 +48,8 @@ CBrick *brick;
 CGhoul *ghoul;
 CBat *bat;
 CMap *map1;
-//bool flag = false;
+
 vector<LPGAMEOBJECT> objects;
-DWORD now;
 DWORD FrameStart;
 CHidenObject *hidenObject;
 CEntranceLevel *level_1;
@@ -79,7 +78,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		}
 		break;
 	case DIK_F:
-		now = GetTickCount();
+		DWORD now= GetTickCount();
 		if (now - FrameStart >= 300)
 		{
 			simon->fight = true;
@@ -325,12 +324,11 @@ void Update(DWORD dt)
 	objects.clear();
 	objects = level_1->GetUpdateObjects();
 	objects.push_back(simon);
-
+	
 	for (int i = 0; i < objects.size() - 1; i++)
 		coObjects.push_back(objects[i]);
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Update(dt, &coObjects);
-	
 }
 
 /*
@@ -348,11 +346,11 @@ void Render()
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
+		
 		level_1->Render();
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
-
+		
 		spriteHandler->End();
 		d3ddv->EndScene();
 	}
@@ -434,10 +432,20 @@ int Run()
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
-
-			game->ProcessKeyboard();
-			
-			Update(dt);
+			if (game->GetPause())
+			{
+				game->ProcessKeyboard();
+				Update(dt);
+			}
+			DWORD now = GetTickCount();
+			if (simon->GetState() == SIMON_STATE_UPDATE)
+			{
+				game->SetPause(false);
+			}
+			if (now - simon->GetFrameUpdate() > 1000)
+			{
+				game->SetPause(true);
+			}
 			Render();
 		}
 		else

@@ -12,11 +12,12 @@ using namespace std;
 #define SIMON_DEFLECT_SPEED		0.1f
 
 #define SIMON_STATE_IDLE			0
-#define SIMON_STATE_WALKING_LEFT	10
-#define SIMON_STATE_WALKING_RIGHT	20
-#define SIMON_STATE_JUMP			30
-#define SIMON_STATE_KNEE			40
-#define SIMON_STATE_DIE				50
+#define SIMON_STATE_WALKING_LEFT	1
+#define SIMON_STATE_WALKING_RIGHT	2
+#define SIMON_STATE_JUMP			3
+#define SIMON_STATE_KNEE			4
+#define SIMON_STATE_DIE				5
+#define SIMON_STATE_UPDATE          6
 
 #define SIMON_ANI_WALKING_LEFT		0
 #define SIMON_ANI_WALKING_RIGHT		1
@@ -44,15 +45,22 @@ class CSimon :public CGameObject
 	int heart=0;
 	int mx;
 	int previousstate;
+	int state_update;
 	CWhip *whip;
+	DWORD FrameUpdate;
 public:
 	bool jump = true;
 	bool fight = false;
+	int alpha=255;
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
 	int GetPreviousState();
 	void SetState(int state);
+	DWORD GetFrameUpdate()
+	{
+		return FrameUpdate;
+	}
 	CSimon() :CGameObject()
 	{
 		mx = 0;

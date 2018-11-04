@@ -17,10 +17,10 @@ using namespace std;
 #define BLUE_WHIP_BBOX_WIDTH	24
 #define BLUE_WHIP_BBOX_HEIGHT	8
 
-#define YELLOW_WHIP_BBOX_WIDTH	24
+#define YELLOW_WHIP_BBOX_WIDTH	39
 #define YELLOW_WHIP_BBOX_HEIGHT	8
 
-#define RED_WHIP_BBOX_WIDTH	   24
+#define RED_WHIP_BBOX_WIDTH	   39
 #define RED_WHIP_BBOX_HEIGHT	8
 class CWhip :
 	public CGameObject

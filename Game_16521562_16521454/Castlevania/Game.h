@@ -40,12 +40,14 @@ class CGame
 
 	LPKEYEVENTHANDLER keyHandler;
 
+	bool pause = true;
+
 public:
 	void InitKeyboard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
 	void SetCamera(float cam_x, float cam_y) { this->cam_x = cam_x; this->cam_y = cam_y; }
 	void GetCamera(float &cam_x, float &cam_y) { cam_x = this->cam_x; cam_y = this->cam_y; }
-	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255,int alpha_x=255, int alpha_y = 255, int alpha_z = 255 );
 
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
@@ -70,7 +72,8 @@ public:
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 
 	static CGame * GetInstance();
-
+	bool GetPause() { return pause; }
+	void SetPause(int pause) { this->pause = pause; }
 	~CGame();
 };
 
