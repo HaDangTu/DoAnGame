@@ -91,6 +91,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				y += dy;
 				items->SetState(ITEM_STATE_DELETE);
 			}
+			else if (dynamic_cast<CDagger *>(e->obj))
+			{
+				OnSkill = true;
+				CItems *items = dynamic_cast<CDagger *>(e->obj);
+				weapon = new CDagger();
+				weapon->LoadData();
+				x += dx;
+				y += dy;
+				items->SetState(ITEM_STATE_DELETE);
+			}
+
 		}
 	}
 	DebugOut(L"heart = %d\n", heart);
@@ -100,10 +111,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	if (x > 150.0f)
 	{
 		game->SetCamera(x - 150.0f, 0.0f);
-		//if (cx < 0)
-		//	game->SetCamera(0.0f, 0.0f);
-		//if (cx + 320.0f >= 768.0f)
-		//	game->SetCamera(cx, 0.0f);
 		if (cx < 0) game->SetCamera(0.0f, 0.0f);
 		if (cx + 320.0f >= 768.0f)
 		{
@@ -135,59 +142,87 @@ void CSimon::Render()
 	}
 	else
 	{
-		if (fight == true)
+		DWORD now = GetTickCount();
+		if (skill==true && now-FrameWeapon<300)
 		{
-			if (vx == 0)
-			{
-				if (mx == 1)
-				{
-					if (nx > 0)
-						ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
-					else
-						ani = SIMON_ANI_KNEE_FIGHT_LEFT;
-				}
-				else
-				{
-					if (nx > 0)
-						ani = SIMON_ANI_FIGHT_RIGHT;
-					else
-						ani = SIMON_ANI_FIGHT_LEFT;
-				}
-			}
+			if (nx > 0)
+				ani = SIMON_ANI_FIGHT_RIGHT;
+			else
+				ani = SIMON_ANI_FIGHT_LEFT;
+			animations[ani]->Render(x, y, 255);
 		}
 		else
 		{
-			if (vx == 0)
+			if (fight == true)
 			{
-				if (mx == 1)
+				if (vx == 0)
 				{
-					if (nx > 0)
-						ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+					if (mx == 1)
+					{
+						if (nx > 0)
+							ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
+						else
+							ani = SIMON_ANI_KNEE_FIGHT_LEFT;
+					}
 					else
-						ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+					{
+						if (nx > 0)
+							ani = SIMON_ANI_FIGHT_RIGHT;
+						else
+							ani = SIMON_ANI_FIGHT_LEFT;
+					}
 				}
-				else
-				{
-					if (nx > 0)
-						ani = SIMON_ANI_IDLE_RIGHT;
-					else
-						ani = SIMON_ANI_IDLE_LEFT;
-				}
+				whip->Render(ani);
+				animations[ani]->Render(x, y, 255);
 			}
 			else
 			{
-				if (nx > 0)
-					ani = SIMON_ANI_WALKING_RIGHT;
+				if (vx == 0)
+				{
+					if (mx == 1)
+					{
+						if (nx > 0)
+							ani = SIMON_ANI_JUMP_RIGHT; //SIMON_ANI_KNEE_RIGHT
+						else
+							ani = SIMON_ANI_JUMP_LEFT; //SIMON_ANI_KNEE_LEFT
+					}
+					else
+					{
+						if (nx > 0)
+							ani = SIMON_ANI_IDLE_RIGHT;
+						else
+							ani = SIMON_ANI_IDLE_LEFT;
+					}
+				}
 				else
-					ani = SIMON_ANI_WALKING_LEFT;
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_WALKING_RIGHT;
+					else
+						ani = SIMON_ANI_WALKING_LEFT;
+				}
+				if (vy < 0 && nx < 0)
+					ani = SIMON_ANI_JUMP_LEFT;
+				else if (vy < 0 && nx > 0)
+					ani = SIMON_ANI_JUMP_RIGHT;
+				animations[ani]->Render(x, y, 255);
 			}
-			if (vy < 0 && nx < 0)
-				ani = SIMON_ANI_JUMP_LEFT;
-			else if (vy < 0 && nx > 0)
-				ani = SIMON_ANI_JUMP_RIGHT;
 		}
-		whip->Render(ani);
-		animations[ani]->Render(x, y, 255);
+	}
+	DWORD now = GetTickCount();
+	if (skill)
+	{
+		if (now - FrameWeapon > 5000)
+		{
+			skill = false;
+		}
+		else
+		{
+			float temp_x, temp_y;
+			weapon->GetPosition(temp_x, temp_y);
+			weapon->SetPosition(temp_x + 5, temp_y);
+			weapon->Render();
+		}
 	}
 }
 

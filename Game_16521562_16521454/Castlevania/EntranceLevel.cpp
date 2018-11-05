@@ -18,13 +18,13 @@ void CEntranceLevel::LoadMap()
 		CInputImage::AddAnimation(in, sprites, ani, texture_candle, 2);
 		animations->Add(100, ani);
 
-		CCandle *candle = new CCandle();	
+		CCandle *candle = new CCandle(DAGGER);
 		candle->AddAnimation(100);
 		candle->SetPosition(85.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
 		cells->InitCells(candle, 2, 1);
 
-		candle = new CCandle();	
+		candle = new CCandle(HEART_SMALL);
 		candle->AddAnimation(100);
 		candle->SetPosition(222.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);

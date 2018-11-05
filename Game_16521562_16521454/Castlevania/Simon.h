@@ -3,6 +3,7 @@
 #include "Whip.h"
 #include "InputImage.h"
 #include <vector>
+#include "Items.h"
 using namespace std;
 #define WHIP_TEXTURE_PATH L"castlevania_texture\\Weapon\\Whip.png"
 
@@ -40,6 +41,7 @@ using namespace std;
 
 #define SIMON_BBOX_KNEE_FIGHT_WIDTH		18
 #define SIMON_BBOX_KNEE_FIGHT_HEIGHT	25
+
 class CSimon :public CGameObject
 {
 	int heart=0;
@@ -48,15 +50,29 @@ class CSimon :public CGameObject
 	int state_update;
 	CWhip *whip;
 	DWORD FrameUpdate;
-public:
+	DWORD FrameWeapon;
+	bool OnSkill = false;
+	bool skill = false;
 	bool jump = true;
 	bool fight = false;
-	int alpha=255;
+	int alpha = 255;
+	CItems* weapon;
+public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
 	int GetPreviousState();
 	void SetState(int state);
+	bool GetSkill() { return skill; }
+	void SetSkill(bool skill) { this->skill = skill; }
+	bool GetJump() { return jump; }
+	void SetJump(bool jump) { this->jump = jump; }
+	bool GetFight() { return fight; }
+	void SetFight(bool fight) { this->fight = fight; }
+	void SetFramWeapon() { FrameWeapon = GetTickCount(); }
+	DWORD GetFramWeapon() { return FrameWeapon; }
+	bool GetOnSkill() { return OnSkill; }
+	CItems* GetWeapon() { return weapon; }
 	DWORD GetFrameUpdate()
 	{
 		return FrameUpdate;
@@ -75,6 +91,7 @@ public:
 		whip->AddAnimation(2005);
 		whip->AddAnimation(2006);
 		whip->AddAnimation(2007);
+
 	}
 
 };

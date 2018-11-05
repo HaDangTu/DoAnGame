@@ -24,7 +24,7 @@ public:
 	~CItems();
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void LoadData();
+	virtual void LoadData()=0;
 	virtual void Render() = 0;
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 };
@@ -43,6 +43,7 @@ public:
 
 	void LoadData();
 	void Render();
+	void RenderWeapon();
 	void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };
 

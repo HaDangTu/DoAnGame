@@ -1,6 +1,7 @@
 #include "Cell.h"
 #include "debug.h"
 #include "Candle.h"
+#include "Simon.h"
 void CCell::SetObjects(LPGAMEOBJECT object)
 {
 	objects.push_back(object);
@@ -79,7 +80,6 @@ void CCells::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, float cam_x, fl
 						{
 							CCandle *candle = dynamic_cast<CCandle *>(e);
 							if (candle->GetItems()->GetState() != ITEM_STATE_DELETE)
-								//list_object->push_back(candle->GetItem());
 								list_object->push_back(candle->GetItems());
 						}
 						else
@@ -87,11 +87,10 @@ void CCells::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, float cam_x, fl
 							list_object->push_back(e);
 						}
 					}
-					else 
+					else
 						list_object->push_back(e);
 				}
 		}
-
 
 }
 

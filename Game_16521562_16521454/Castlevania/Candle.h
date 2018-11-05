@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <time.h>
 #include "GameObject.h"
-#include "Item.h"
+//#include "Item.h"
 #include "Items.h"
 #define DAGGER		0
 #define HEART		1
@@ -33,7 +33,6 @@ public:
 	CCandle()
 	{
 		hiteffect = new Chiteffect();
-		//item = new CItem(ani);
 
 		int random;
 		srand(time(NULL));
