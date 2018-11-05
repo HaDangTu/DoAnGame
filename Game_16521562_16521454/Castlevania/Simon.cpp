@@ -63,7 +63,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 					vy = 0; jump = true;
 				}
 			}
-			else if (dynamic_cast<CItem *> (e->obj))
+			/*else if (dynamic_cast<CItem *> (e->obj))
 			{
 				CItem *item = dynamic_cast<CItem *>(e->obj);
 				if(item->state== ITEM_STATE_HEART_SMALL) heart++;
@@ -83,6 +83,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				x += dx;
 				y += dy;
 				item->SetState(ITEM_STATE_DELETE);
+			}*/
+			else if (dynamic_cast<CHeart *>(e->obj))
+			{
+				CItems *items = dynamic_cast<CHeart *>(e->obj);
+				x += dx;
+				y += dy;
+				items->SetState(ITEM_STATE_DELETE);
 			}
 		}
 	}

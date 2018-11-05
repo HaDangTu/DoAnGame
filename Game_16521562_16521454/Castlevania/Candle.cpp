@@ -12,9 +12,10 @@ void CCandle::Render()
 	{
 		int now = GetTickCount();
 		hiteffect->SetPosition(x, y);
-		item->SetPosition(x+5, y+10);
+		//item->SetPosition(x+5, y+10);
+		items->SetPosition(x + 5, y + 10);
 		hiteffect->Render();
-		if (now - time >= FrameTime)
+		if (now - Time >= FrameTime)
 			SetState(CANDLE_STATE_DELETE);
 	}
 }
@@ -35,10 +36,11 @@ void CCandle::SetState(int state)
 	case CANDLE_STATE_NORMAL:
 		break;
 	case CANDLE_STATE_DISAPPEAR:
-		time = GetTickCount();
+		Time = GetTickCount();
 		break;
 	case CANDLE_STATE_DELETE:
 		break;
 	}
 }
+
 

@@ -53,14 +53,15 @@ void CDagger::LoadData()
 	ifstream in("Data\\Dagger.txt");
 
 	CInputImage::AddAnimation(in, sprites, ani, texitem, 1);
-	anims->Add(8000, ani);
+	anims->Add(6000, ani);
 	in.close();
 	AddAnimation(6000);
 }
 
 void CDagger::Render()
 {
-	animations[0]->Render(x, y);
+	if (state != ITEM_STATE_DELETE)
+		animations[0]->Render(x, y);
 }
 
 void CDagger::GetBoundingBox(float & left, float & top, float & right, float & bottom)
