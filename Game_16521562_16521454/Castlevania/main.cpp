@@ -28,20 +28,21 @@ using namespace std;
 #define SIMON_TEXTURE_PATH L"castlevania_texture\\Simon\\Simon.png"
 #define BBOX_TEXTURE_PATH L"bbox.png"
 #define CANDLE_TEXTURE_PATH L"castlevania_texture\\Weapon\\Candle.png"
-#define MAP_LEVEL1_TEXTURE_PATH L"castlevania_texture\\Background\\Level 1 Entrance.png"
+#define TITLE_SCREEN_PATH L"castlevania_texture\\Background\\Title Screen.png"
+#define INTRO_SCREEN_PATH L"castlevania_texture\\Background\\Intro Screen.png"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 224
 
 #define MAX_FRAME_RATE 120
 
-#define ID_SIMON	0
-#define ID_BRICK	1
-#define ID_GHOUL    3
-#define ID_BAT      4
-#define ID_CANDLE	5
-#define ID_MAP_LEVEL1		6
+#define ID_SIMON			2
+#define ID_BRICK			3
+#define ID_GHOUL			4
+#define ID_BAT				5
+#define ID_TITLE_SCREEN		7
+#define ID_INTRO_SCREEN		8
 CGame *game;
 CSimon *simon;
 CBrick *brick;
@@ -53,6 +54,9 @@ vector<LPGAMEOBJECT> objects;
 DWORD FrameStart;
 CHidenObject *hidenObject;
 CEntranceLevel *level_1;
+LPDIRECT3DTEXTURE9 texture_title;
+LPDIRECT3DTEXTURE9 texture_intro;
+int screen = 1;
 class CSampleKeyHander: public CKeyEventHandler
 {
 	virtual void KeyState(BYTE *states);
@@ -67,6 +71,9 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	switch (KeyCode)
 	{
+	case DIK_RETURN:
+		screen = 2;
+		break;
 	case DIK_D:
 		if (simon->GetFight() == false)
 		{
@@ -185,6 +192,8 @@ void LoadResources()
 	texture->Add(ID_BBOX, BBOX_TEXTURE_PATH, D3DCOLOR_XRGB(0, 128, 128));
 	texture->Add(ID_CANDLE, CANDLE_TEXTURE_PATH, D3DCOLOR_XRGB(34, 177, 76));
 	texture->Add(ID_ITEM, ITEM_TEXTURE_PATH, D3DCOLOR_XRGB(128, 0, 0));
+	texture->Add(ID_TITLE_SCREEN, TITLE_SCREEN_PATH, D3DCOLOR_XRGB(255, 255, 255));
+	texture->Add(ID_INTRO_SCREEN, INTRO_SCREEN_PATH, D3DCOLOR_XRGB(255, 255, 255));
 
 	CSprites *sprites = CSprites::GetInstance();
 	CAnimations *animations = CAnimations::GetInstance();
@@ -233,7 +242,8 @@ void LoadResources()
 	simon->SetPosition(10.0f, 80.0f);
 	//simon->SetState(SIMON_STATE_IDLE);
 	
-
+	texture_title = texture->Get(ID_TITLE_SCREEN);
+	texture_intro = texture->Get(ID_INTRO_SCREEN);
 	/*LPDIRECT3DTEXTURE9 texbrick = texture->Get(ID_BRICK);
 	
 	sprites->Add(20011, 0, 0, 15, 15, texbrick);
@@ -347,14 +357,20 @@ void Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	vector<LPGAMEOBJECT> coObjects;
-	objects.clear();
-	objects = level_1->GetUpdateObjects();
-	objects.push_back(simon);
-	
-	for (int i = 0; i < objects.size() - 1; i++)
-		coObjects.push_back(objects[i]);
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Update(dt, &coObjects);
+	switch (screen)
+	{
+	case 2:
+		vector<LPGAMEOBJECT> coObjects;
+		objects.clear();
+		objects = level_1->GetUpdateObjects();
+		objects.push_back(simon);
+
+		for (int i = 0; i < objects.size() - 1; i++)
+			coObjects.push_back(objects[i]);
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->Update(dt, &coObjects);
+		break;
+	}
 }
 
 /*
@@ -372,10 +388,18 @@ void Render()
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-		
-		level_1->Render();
-		for (int i = 0; i < objects.size(); i++)
-			objects[i]->Render();
+		switch (screen)
+		{
+		case 1:
+			game->Draw(0, 0, texture_title, 0, 0, 258, 225);
+			break;
+		case 2:
+			level_1->Render();
+			for (int i = 0; i < objects.size(); i++)
+				objects[i]->Render();
+
+			break;
+		}
 		
 		spriteHandler->End();
 		d3ddv->EndScene();

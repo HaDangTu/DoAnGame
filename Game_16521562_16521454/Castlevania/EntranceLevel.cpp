@@ -22,32 +22,35 @@ void CEntranceLevel::LoadMap()
 		candle->AddAnimation(100);
 		candle->SetPosition(85.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
+		/*cells->InitCells(candle, 2, 1);*/
 		cells->InitCells(candle, 2, 1);
 
 		candle = new CCandle(WHIP_UPDATE);
 		candle->AddAnimation(100);
 		candle->SetPosition(222.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
-		cells->InitCells(candle, 2, 2);
+		/*cells->InitCells(candle, 2, 2);*/
+		cells->InitCells(candle, 2, 3);
 
 		candle = new CCandle(HEART_SMALL);
 		candle->AddAnimation(100);
 		candle->SetPosition(343.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
-		cells->InitCells(candle, 2, 4);
-		
+		//cells->InitCells(candle, 2, 4);
+		cells->InitCells(candle, 2, 5);
+
 		candle = new CCandle(WHIP_UPDATE);
 		candle->AddAnimation(100);
 		candle->SetPosition(475.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
-		cells->InitCells(candle, 2, 6);
-
+		//cells->InitCells(candle, 2, 6);
+		cells->InitCells(candle, 2, 7);
 		candle = new CCandle(DAGGER);		
 		candle->AddAnimation(100);
 		candle->SetPosition(600.0f, 111.0f);
 		candle->SetState(CANDLE_STATE_NORMAL);
-		cells->InitCells(candle, 2, 7);
-
+		//cells->InitCells(candle, 2, 7);
+		cells->InitCells(candle, 2, 9);
 		for (int i = 0; i < 10; i++)
 		{
 			CHidenObject *hidenObj = new CHidenObject();

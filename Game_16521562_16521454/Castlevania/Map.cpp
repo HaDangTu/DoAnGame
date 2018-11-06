@@ -30,8 +30,8 @@ vector<LPGAMEOBJECT> CMap::GetUpdateObjects()
 void CMap::LoadMap()
 {
 	int column, row;
-	column = (int)width / 80 + 1;
-	row = (int)height / 60 + 1;
+	column = (int)width / 64 + 1;
+	row = (int)height / 56 + 1;
 
 	cells = new CCells(row, column);
 

@@ -125,14 +125,14 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	CGame *game = CGame::GetInstance();
 	float cx, cy;
 	game->GetCamera(cx, cy);
-	if (x > 150.0f)
+	if (x > 110.0f)
 	{
-		game->SetCamera(x - 150.0f, 0.0f);
+		game->SetCamera(x - 110.0f, 0.0f);
 		if (cx < 0) game->SetCamera(0.0f, 0.0f);
 		if (cx + 320.0f >= 768.0f)
 		{
 			game->SetCamera(cx, 0.0f);
-			if (x < 620.0f) game->SetCamera(x - 150.0f, 0.0f);
+			if (x < 620.0f) game->SetCamera(x - 110.0f, 0.0f);
 		}
 	}
 }

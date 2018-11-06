@@ -61,11 +61,11 @@ void CCells::GetListOfObjects(vector<LPGAMEOBJECT>* list_object, float cam_x, fl
 	int xe, ye;
 	int i, j, k;
 	list_object->clear();
-	xs = (int)cam_x / 80;
-	ys = (int)cam_y / 60;
+	xs = (int)cam_x / 64;
+	ys = (int)cam_y / 56;
 
-	xe = (int)(cam_x + 320.0f) / 80;
-	ye = (int)(cam_y + 160.0f) / 60;
+	xe = (int)(cam_x + 256.0f) / 64;
+	ye = (int)(cam_y + 160.0f) / 56;
 
 	for (i = ys; i <= ye; i++)
 		for (j = xs; j <= xe; j++)
