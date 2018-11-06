@@ -46,6 +46,17 @@ void CItems::LoadData()
 	texitem = textures->Get(ID_ITEM);
 }
 
+void CDagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (state == ITEM_STATE_ITEM)
+		CItems::Update(dt, coObjects);
+	else if (state == ITEM_STATE_WEAPON_RIGHT)
+		SetPosition(x + 3, y);
+	else if(state == ITEM_STATE_WEAPON_LEFT)
+		SetPosition(x - 3, y);
+
+}
+
 void CDagger::LoadData()
 {
 	CItems::LoadData();
@@ -54,14 +65,23 @@ void CDagger::LoadData()
 
 	CInputImage::AddAnimation(in, sprites, ani, texitem, 1);
 	anims->Add(6000, ani);
+	CInputImage::AddAnimation(in, sprites, ani, texitem, 1);
+	anims->Add(6001, ani);
 	in.close();
 	AddAnimation(6000);
+	AddAnimation(6001);
 }
 
 void CDagger::Render()
 {
-	if (state != ITEM_STATE_DELETE)
+	if (state == ITEM_STATE_WEAPON_LEFT)
+	{
+		animations[1]->Render(x, y);
+	}
+	else if (state != ITEM_STATE_DELETE)
+	{
 		animations[0]->Render(x, y);
+	}
 }
 
 void CDagger::GetBoundingBox(float & left, float & top, float & right, float & bottom)
@@ -120,4 +140,30 @@ void CHeart::GetBoundingBox(float & left, float & top, float & right, float & bo
 	}
 }
 
+void CWhipUpdate::LoadData()
+{
+	CItems::LoadData();
+	LPANIMATION ani = new CAnimation(100);
+	ifstream in("Data\\WhipUpdate.txt");
 
+	CInputImage::AddAnimation(in, sprites, ani, texitem, 1);
+	anims->Add(9000, ani);
+	in.close();
+	AddAnimation(9000);
+}
+
+void CWhipUpdate::Render()
+{
+	if (state != ITEM_STATE_DELETE)
+	{
+		animations[0]->Render(x, y);
+	}
+}
+
+void CWhipUpdate::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	left = x;
+	top = y;
+	right = x + WHIP_UPDATE_BBOX_WIDTH;
+	bottom = y + WHIP_UPDATE_BBOX_HEIGHT;
+}

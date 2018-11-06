@@ -85,11 +85,16 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 			{
 				if (simon->GetOnSkill())
 				{
+					if (simon->nx > 0)
+						simon->GetWeapon()->SetState(ITEM_STATE_WEAPON_RIGHT);
+					else
+						simon->GetWeapon()->SetState(ITEM_STATE_WEAPON_LEFT);
 					simon->SetFramWeapon();
 					simon->SetSkill(true);
 					float temp_x, temp_y;
 					simon->GetPosition(temp_x, temp_y);
-					simon->GetWeapon()->SetPosition(temp_x, temp_y);
+					simon->GetWeapon()->SetPosition(temp_x, temp_y+5);
+					simon->SetState(SIMON_STATE_IDLE);
 				}
 			}
 			else
@@ -119,26 +124,29 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
-	if (simon->GetFight() == false)
+	if (!simon->GetSkill())
 	{
-		if (game->IsKeyDown(DIK_DOWN))
+		if (simon->GetFight() == false)
 		{
-			if(game->IsKeyDown(DIK_UP))
-				simon->SetState(SIMON_STATE_IDLE);
-			else
+			if (game->IsKeyDown(DIK_DOWN))
 			{
-				simon->SetState(SIMON_STATE_KNEE);
+				if (game->IsKeyDown(DIK_UP))
+					simon->SetState(SIMON_STATE_IDLE);
+				else
+				{
+					simon->SetState(SIMON_STATE_KNEE);
 					if (game->IsKeyDown(DIK_LEFT)) simon->nx = -1;
 					else if (game->IsKeyDown(DIK_RIGHT))  simon->nx = 1;
+				}
 			}
-		}
-		else
-		{
-			if (game->IsKeyDown(DIK_LEFT)) 
-				simon->SetState(SIMON_STATE_WALKING_LEFT);
-			else if (game->IsKeyDown(DIK_RIGHT)) 
-				simon->SetState(SIMON_STATE_WALKING_RIGHT);
-			else simon->SetState(SIMON_STATE_IDLE);
+			else
+			{
+				if (game->IsKeyDown(DIK_LEFT))
+					simon->SetState(SIMON_STATE_WALKING_LEFT);
+				else if (game->IsKeyDown(DIK_RIGHT))
+					simon->SetState(SIMON_STATE_WALKING_RIGHT);
+				else simon->SetState(SIMON_STATE_IDLE);
+			}
 		}
 	}
 }

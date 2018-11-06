@@ -99,12 +99,12 @@ void CWhip::Render(int ani)
 	{
 		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[2]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
 		}
 		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[3]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
 		}
 	}
@@ -112,12 +112,12 @@ void CWhip::Render(int ani)
 	{
 		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[4]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
 		}
 		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[5]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
 		}
 	}
@@ -125,12 +125,12 @@ void CWhip::Render(int ani)
 	{
 		if (ani == SIMON_ANI_FIGHT_LEFT || ani == SIMON_ANI_KNEE_FIGHT_LEFT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[6]->RenderWhip(fight, x + 46, y + 1, x + 38, y - 1, x, y, 255);
 		}
 		else if (ani == SIMON_ANI_FIGHT_RIGHT || ani == SIMON_ANI_KNEE_FIGHT_RIGHT)
 		{
-			RenderBoundingBox(200);
+			//RenderBoundingBox(200);
 			animations[7]->RenderWhip(fight, x - 29, y + 2, x - 38, y - 1, x, y, 255);
 		}
 	}

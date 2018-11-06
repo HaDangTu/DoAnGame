@@ -4,4 +4,6 @@
 
 31003 43 43 61 59 // whip upgrade
 
-31004 173 40 196 49 //Dagger
+31004 173 40 196 49 //Dagger right
+
+31005 176 57 196 68 //Dagger left

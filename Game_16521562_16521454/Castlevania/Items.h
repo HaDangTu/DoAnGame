@@ -8,7 +8,10 @@
 #define ITEM_GRAVITY	0.01f
 #define ID_ITEM 3
 
-#define ITEM_STATE_DELETE 1
+#define ITEM_STATE_ITEM 0
+#define ITEM_STATE_WEAPON_RIGHT 1
+#define ITEM_STATE_WEAPON_LEFT 2
+#define ITEM_STATE_DELETE 3
 class CItems :
 	public CGameObject
 {
@@ -16,9 +19,7 @@ protected:
 	CTextures *textures;
 	CSprites *sprites;
 	CAnimations *anims;
-
 	LPDIRECT3DTEXTURE9 texitem;
-
 public:
 	CItems();
 	~CItems();
@@ -41,9 +42,9 @@ public:
 	int GetDamage() { return damage; }
 	void SetDamage(int damage) { this->damage = damage; }
 
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void LoadData();
 	void Render();
-	void RenderWeapon();
 	void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };
 
@@ -87,4 +88,18 @@ public:
 	void Render();
 	void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
+};
+
+#define WHIP_UPDATE_BBOX_WIDTH 18
+#define WHIP_UPDATE_BBOX_HEIGHT 16
+
+class CWhipUpdate : public CItems
+{
+public:
+	CWhipUpdate() :CItems() {  }
+
+	//void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	void LoadData();
+	void Render();
+	void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };

@@ -32,11 +32,15 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			whip->fight = false;
 		}
 	}
+	if (skill)
+	{
+		weapon->Update(dt);
+	}
 	if (coEvents.size() == 0)
 	{
 		x += dx;
 		y += dy;
-	}
+	}	
 	else
 	{
 
@@ -88,7 +92,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			{
 				CItems *items = dynamic_cast<CHeart *>(e->obj);
 				x += dx;
-				y += dy;
 				items->SetState(ITEM_STATE_DELETE);
 			}
 			else if (dynamic_cast<CDagger *>(e->obj))
@@ -98,7 +101,21 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				weapon = new CDagger();
 				weapon->LoadData();
 				x += dx;
-				y += dy;
+				items->SetState(ITEM_STATE_DELETE);
+			}
+			else if (dynamic_cast<CWhipUpdate *>(e->obj))
+			{
+				CItems *items = dynamic_cast<CWhipUpdate *>(e->obj);
+				state_update = state;
+				if (whip->state == WHITE_WHIP)
+					whip->SetState(BLUE_WHIP);
+				else if (whip->state == BLUE_WHIP)
+					whip->SetState(YELLOW_WHIP);
+				else if (whip->state == YELLOW_WHIP)
+					whip->SetState(RED_WHIP);
+				SetState(SIMON_STATE_UPDATE);
+				FrameUpdate = GetTickCount();
+				x += dx;
 				items->SetState(ITEM_STATE_DELETE);
 			}
 
@@ -208,20 +225,16 @@ void CSimon::Render()
 				animations[ani]->Render(x, y, 255);
 			}
 		}
-	}
-	DWORD now = GetTickCount();
-	if (skill)
-	{
-		if (now - FrameWeapon > 5000)
+		if (skill)
 		{
-			skill = false;
-		}
-		else
-		{
-			float temp_x, temp_y;
-			weapon->GetPosition(temp_x, temp_y);
-			weapon->SetPosition(temp_x + 5, temp_y);
-			weapon->Render();
+			if (now - FrameWeapon > 500)
+			{
+				skill = false;
+			}
+			else
+			{
+				weapon->Render();
+			}
 		}
 	}
 }

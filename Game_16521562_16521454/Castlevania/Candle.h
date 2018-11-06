@@ -62,13 +62,14 @@ public:
 	CCandle(int item) 
 	{
 		hiteffect = new Chiteffect();
+		int random = rand() % 2;
 		switch (item)
 		{
+		
 		case DAGGER:
 			items = new CDagger();
 			break;
-		case HEART:
-			int random = rand() % 2;
+		case HEART:		
 			switch (random)
 			{
 			case 0:
@@ -79,7 +80,10 @@ public:
 				break;
 			}
 			break;
-		}
+		case WHIP_UPDATE:
+			items = new CWhipUpdate();
+			break;
+		}	
 		items->LoadData();
 	}
 };
