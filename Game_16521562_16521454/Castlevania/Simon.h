@@ -34,7 +34,7 @@ using namespace std;
 #define SIMON_ANI_DIE_RIGHT			11
 
 #define SIMON_BBOX_IDLE_WIDTH		18
-#define SIMON_BBOX_IDLE_HEIGHT		34
+#define SIMON_BBOX_IDLE_HEIGHT		35
 
 #define SIMON_BBOX_KNEE_WIDTH		18
 #define SIMON_BBOX_KNEE_HEIGHT		25
@@ -58,6 +58,7 @@ class CSimon :public CGameObject
 	int alpha = 255;
 	CItems* weapon;
 public:
+	DWORD FrameStart;
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObject = NULL);
 	void Render();
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);

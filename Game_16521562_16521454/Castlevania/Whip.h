@@ -8,9 +8,6 @@ using namespace std;
 #define YELLOW_WHIP 2
 #define RED_WHIP 3
 
-#define WHIP_ANI_LEFT		0
-#define WHIP_ANI_RIGHT		1
-
 #define WHITE_WHIP_BBOX_WIDTH	22
 #define WHITE_WHIP_BBOX_HEIGHT	8
 
@@ -22,20 +19,24 @@ using namespace std;
 
 #define RED_WHIP_BBOX_WIDTH	   39
 #define RED_WHIP_BBOX_HEIGHT	8
+
+#define WHIP_STATE_LEFT 0
+#define WHIP_STATE_RIGHT 1
 class CWhip :
 	public CGameObject
 {
 	DWORD lastFrameTime;
 	int currentFrame;
 	vector<LPANIMATION_FRAME> frames;
-	void LoadAnimaion();
+	int state_whip;
 public:
+	void LoadAnimaion();
 	bool fight;
 	CWhip();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
-	void Render(int ani);
 	void GetBoundingBox(float & left, float & top, float & right, float & bottom);
 	void SetState(int state);
+	void SetStateWhip(int state_whip){ this->state_whip = state_whip;}
 };
 

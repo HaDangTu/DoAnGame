@@ -21,16 +21,25 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 	if (fight == true)
 	{
+		DWORD now = GetTickCount();
+		if (now - FrameStart >= 300)
+		{
+			fight = false;
+			whip->fight = false;
+		}
 		if (nx < 0)
 			whip->SetPosition(x - 22, y + 5);
 		else
 			whip->SetPosition(x + 22, y + 5);
 		whip->Update(dt, coObject);
-		if (whip->fight == true)
+	/*	if (whip->fight == true)
 		{
-			fight = false;
-			whip->fight = false;
-		}
+			if (whip->animations[1]->GetCureentFrame() == 0)
+			{
+				fight = false;
+				whip->fight = false;
+			}
+		}*/
 	}
 	if (skill)
 	{
@@ -67,27 +76,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 					vy = 0; jump = true;
 				}
 			}
-			/*else if (dynamic_cast<CItem *> (e->obj))
-			{
-				CItem *item = dynamic_cast<CItem *>(e->obj);
-				if(item->state== ITEM_STATE_HEART_SMALL) heart++;
-				if (item->state == ITEM_STATE_HEART_BIG) heart+=2;
-				if (item->state == ITEM_STATE_WHIP_UPDATE)
-				{
-					state_update = state;
-					if(whip->state==WHITE_WHIP)
-						whip->SetState(BLUE_WHIP);
-					else if(whip->state == BLUE_WHIP)
-						whip->SetState(YELLOW_WHIP);
-					else if (whip->state == YELLOW_WHIP)
-						whip->SetState(RED_WHIP);
-					SetState(SIMON_STATE_UPDATE);
-					FrameUpdate = GetTickCount();
-				}
-				x += dx;
-				y += dy;
-				item->SetState(ITEM_STATE_DELETE);
-			}*/
+
 			else if (dynamic_cast<CHeart *>(e->obj))
 			{
 				CItems *items = dynamic_cast<CHeart *>(e->obj);
@@ -121,7 +110,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 		}
 	}
-	DebugOut(L"heart = %d\n", heart);
+	//DebugOut(L"heart = %d\n", heart);
 	CGame *game = CGame::GetInstance();
 	float cx, cy;
 	game->GetCamera(cx, cy);
@@ -162,34 +151,31 @@ void CSimon::Render()
 		DWORD now = GetTickCount();
 		if (skill==true && now-FrameWeapon<300)
 		{
-			if (nx > 0)
-				ani = SIMON_ANI_FIGHT_RIGHT;
-			else
-				ani = SIMON_ANI_FIGHT_LEFT;
+			if (nx > 0)	ani = SIMON_ANI_FIGHT_RIGHT;
+			else ani = SIMON_ANI_FIGHT_LEFT;
 			animations[ani]->Render(x, y, 255);
 		}
 		else
 		{
 			if (fight == true)
 			{
-				if (vx == 0)
+				if (mx == 1)
 				{
-					if (mx == 1)
-					{
-						if (nx > 0)
-							ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
-						else
-							ani = SIMON_ANI_KNEE_FIGHT_LEFT;
-					}
+					if (nx > 0)
+						ani = SIMON_ANI_KNEE_FIGHT_RIGHT;
 					else
-					{
-						if (nx > 0)
-							ani = SIMON_ANI_FIGHT_RIGHT;
-						else
-							ani = SIMON_ANI_FIGHT_LEFT;
-					}
+						ani = SIMON_ANI_KNEE_FIGHT_LEFT;
 				}
-				whip->Render(ani);
+				else
+				{
+					if (nx > 0)
+						ani = SIMON_ANI_FIGHT_RIGHT;
+					else
+						ani = SIMON_ANI_FIGHT_LEFT;
+				}
+				if (nx > 0)whip->SetStateWhip(WHIP_STATE_RIGHT);
+				else whip->SetStateWhip(WHIP_STATE_LEFT);
+				whip->Render();
 				animations[ani]->Render(x, y, 255);
 			}
 			else
@@ -227,16 +213,12 @@ void CSimon::Render()
 		}
 		if (skill)
 		{
-			if (now - FrameWeapon > 500)
-			{
-				skill = false;
-			}
-			else
-			{
-				weapon->Render();
-			}
+			if (now - FrameWeapon > 500)	skill = false;
+			else weapon->Render();
 		}
 	}
+	DebugOut(L"x=%f\n y=%f\n", x, y);
+	RenderBoundingBox(100);
 }
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)

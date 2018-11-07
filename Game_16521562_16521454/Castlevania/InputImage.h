@@ -12,6 +12,6 @@ public:
 		int &right, int &bottom);
 	static void AddAnimation(ifstream &in, CSprites *sprites,
 		LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture,
-		int n);
+		int n,int time=100);
 };
 

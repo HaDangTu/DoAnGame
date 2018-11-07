@@ -9,11 +9,11 @@ void CInputImage::LoadDataFromFile(ifstream & in, int & id, int & left, int & to
 	in >> bottom;
 }
 
-void CInputImage::AddAnimation(ifstream & in, CSprites * sprites, LPANIMATION & ani, LPDIRECT3DTEXTURE9 texture, int n)
+void CInputImage::AddAnimation(ifstream & in, CSprites * sprites, LPANIMATION & ani, LPDIRECT3DTEXTURE9 texture, int n,int time)
 {
 	int id, left, top, right, bottom;
 	int i;
-	ani = new CAnimation(100);
+	ani = new CAnimation(time);
 	for (i = 0; i < n; i++)
 	{
 		LoadDataFromFile(in, id, left, top, right, bottom);

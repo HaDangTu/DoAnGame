@@ -19,6 +19,7 @@
 #include "Map.h"
 #include "HidenObject.h"
 #include "EntranceLevel.h"
+#include "InputImage.h"
 using namespace std;
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -51,7 +52,6 @@ CBat *bat;
 CMap *map1;
 
 vector<LPGAMEOBJECT> objects;
-DWORD FrameStart;
 CHidenObject *hidenObject;
 CEntranceLevel *level_1;
 LPDIRECT3DTEXTURE9 texture_title;
@@ -86,7 +86,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_F:
 		DWORD now= GetTickCount();
-		if (now - FrameStart >= 300)
+		if (now - simon->FrameStart >= 300)
 		{
 			if (game->IsKeyDown(DIK_UP))
 			{
@@ -112,7 +112,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 				if (game->IsKeyDown(DIK_DOWN))
 					simon->SetState(SIMON_STATE_KNEE);
 			}
-			FrameStart = GetTickCount();
+			simon->FrameStart = GetTickCount();
 		}
 		break;
 	}
@@ -177,13 +177,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	TO-DO: Improve this function by loading texture,sprite,animation,object from file
 */
-void AddAnimation(ifstream &in, CSprites *sprites,
-	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, 
-	int n);
-void LoadDataFromFile(ifstream &in,
-	int &id,
-	int &left, int &top,
-	int &right, int &bottom);
+
 void LoadResources()
 {
 	CTextures *texture = CTextures::GetInstance();
@@ -206,25 +200,25 @@ void LoadResources()
 	
 
 	ifstream in("Data\\Simon.txt");
-	AddAnimation(in, sprites, ani, texsimon, 3);//walk left
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3);//walk left
 	animations->Add(101, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3);//walk right
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3);//walk right
 	animations->Add(102, ani);
-	AddAnimation(in, sprites, ani, texsimon, 1);//idle left
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 1);//idle left
 	animations->Add(201, ani);
-	AddAnimation(in, sprites, ani, texsimon, 1);//idle right
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 1);//idle right
 	animations->Add(202, ani);
-	AddAnimation(in, sprites, ani, texsimon, 1);//jump left
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 1);//jump left
 	animations->Add(301, ani);
-	AddAnimation(in, sprites, ani, texsimon, 1);//jump right
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 1);//jump right
 	animations->Add(302, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3); //fight left
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3,100); //fight left
 	animations->Add(401, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3); //fight right
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3,100); //fight right
 	animations->Add(402, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3);//knee fight left
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3,100);//knee fight left
 	animations->Add(501, ani);
-	AddAnimation(in, sprites, ani, texsimon, 3); //knee fight right
+	CInputImage::AddAnimation(in, sprites, ani, texsimon, 3,100); //knee fight right
 	animations->Add(502, ani);
 	in.close();
 
@@ -322,19 +316,6 @@ void LoadResources()
 	objects.push_back(simon);
 }
 
-void AddAnimation(ifstream &in, CSprites * sprites, 
-	LPANIMATION &ani, LPDIRECT3DTEXTURE9 texture, int n)
-{
-	int id, left, top, right, bottom;
-	int i;
-	ani = new CAnimation(100);
-	for (i = 0; i < n; i++)
-	{
-		LoadDataFromFile(in, id, left, top, right, bottom);
-		sprites->Add(id, left, top, right, bottom, texture);
-		ani->Add(id);
-	}
-}
 
 void LoadDataFromFile(ifstream &in,
 	int &id,
@@ -397,7 +378,6 @@ void Render()
 			level_1->Render();
 			for (int i = 0; i < objects.size(); i++)
 				objects[i]->Render();
-
 			break;
 		}
 		
